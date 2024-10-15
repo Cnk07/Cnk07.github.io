@@ -1,186 +1,121 @@
 <!DOCTYPE html>
-<html lang="tr">
-
+<html lang="en">
 <head>
-    <title>Cenk Efe Paydaş - Kişisel Web Sitesi</title>
     <meta charset="UTF-8">
-    <meta name="description" content="Cenk Efe Paydaş - Kişisel Web Sitesi">
-    <meta name="keywords" content="cenkefepaydaş, Cenk Efe Paydaş, Kişisel Web, cenkefepaydas.com">
-    <meta name="author" content="Cenk Efe Paydaş">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Message Board</title>
     <style>
         body {
-            font: 20px Montserrat, sans-serif;
-            line-height: 1.8;
-            color: #f5f6f7;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-
-        p {
-            font-size: 16px;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        .margin {
-            margin-bottom: 45px;
-        }
-
-        .bg-1 {
-            background-color: #2dde98;
-            /* Green */
-            color: #333333;
-            /* black */
-        }
-
-        .bg-2 {
-            background-color: #474e5d;
-            /* Dark Blue */
-            color: #ffffff;
-        }
-
-        .bg-3 {
-            background-color: #ffffff;
-            /* White */
-            color: #555555;
-        }
-
-        .bg-4 {
-            background-color: #4C3173;
-            /* Blue Diamond */
-            color: #fff;
-        }
-
-        .bg-5 {
-            background-color: #ecebe8;
-            /* Gray */
+        h1 {
+            text-align: center;
             color: #333;
         }
-
-        .container-fluid {
-            padding-top: 70px;
-            padding-bottom: 70px;
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-
-        .navbar {
-            padding-top: 15px;
-            padding-bottom: 15px;
-            border: 0;
-            border-radius: 0;
-            margin-bottom: 0;
-            font-size: 12px;
-            letter-spacing: 5px;
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
         }
-
-        .navbar-nav li a:hover {
-            color: #4C3173 !important;
+        button:hover {
+            background-color: #218838;
+        }
+        .message-list {
+            margin-top: 20px;
+        }
+        .message {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
-
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Cenk Efe Paydaş</a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#kimdir">Kimdir?</a></li>
-                    <li><a href="#neyapar">Ne yapar?</a></li>
-                    <li><a href="#blog">Blog</a></li>
-                    <li><a href="#iletisim">İletişim</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div class="container">
+        <h1>Anonymous Message Board</h1>
+        <form id="messageForm">
+            <textarea id="messageInput" rows="4" placeholder="Leave your anonymous message here..."></textarea>
+            <button type="submit">Submit</button>
+        </form>
 
-    <!-- First Container -->
-    <div id="kimdir" class="container-fluid bg-1 text-center">
-        <h3 class="margin">Merhaba, Ben Cenk Efe!</h3>
-        <img src="img/cenkefe.jpg" class="img-responsive img-circle margin" style="display:inline" alt="cenkefepaydas" width="350" height="350">
-        <h3>Yazılım Geliştirici</h3>
-    </div>
-
-    <!-- Second Container -->
-    <div id="neyapar" class="container-fluid bg-2 text-center">
-        <h3 class="margin">Neler Yaparım?</h3>
-        <p>Genellikle yazılım geliştiririm. Bol bol yurtiçi ve yurtdışı seyahatleri yapar, yeni yerler ve insanlar keşfederim.</p>
-        <a href="http://cenkefepaydas.com/" class="btn btn-default btn-lg">
-            <span class="glyphicon glyphicon-link"></span> Siteye Git
-        </a>
-    </div>
-
-    <!-- Third Container (Grid) -->
-    <div id="blog" class="container-fluid bg-3 text-center">
-        <h3 class="margin">Blog</h3>
-        <br>
-        <div class="row">
-            <div class="col-sm-4">
-                <p>Git, yazılım geliştirme süreçlerinde kullanılan, hız odaklı, dağıtık çalışan bir sürüm kontrol ve kaynak kod yönetim sistemidir.</p>
-                <img src="img/blog-img/git.jpg" class="img-responsive margin" style="width:100%" alt="git">
-            </div>
-            <div class="col-sm-4">
-                <p>HTML, Hiper Metin İşaretleme Dili (Hypertext Markup Language) web sayfalarını oluşturmak için kullanılan metin işleme dilidir.</p>
-                <img src="img/blog-img/html5.jpg" class="img-responsive margin" style="width:100%" alt="html">
-            </div>
-            <div class="col-sm-4">
-                <p>Python bir programlama dilidir. Diğer programlama dillerinde olduğu gibi bilgisayarlara hükmetmeyi sağlar.</p>
-                <img src="img/blog-img/python.jpg" class="img-responsive margin" style="width:100%" alt="python">
-            </div>
+        <div class="message-list" id="messageList">
+            <!-- Messages will appear here -->
         </div>
     </div>
 
-    <!-- Contact -->
-    <div id="iletisim" class="container-fluid bg-5 text-center">
-        <h3 class="margin">İletişim</h3>
-        <br>
-        <div class="row ">
-            <div class="col-sm-5 text-left">
-                <p>Merhaba demek ister misin?</p>
-                <p><span class="glyphicon glyphicon-map-marker"></span> İstanbul, TR</p>
-                <p><span class="glyphicon glyphicon-phone"></span> +90 555 555 55 55</p>
-                <p><span class="glyphicon glyphicon-envelope"></span> cenkefepaydas@gmail.com</p>
-            </div>
-            <div class="col-sm-7 ">
-                <div class="row">
-                    <div class="col-sm-6 form-group">
-                        <input class="form-control" id="name" name="name" placeholder="İsim" type="text" required>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        <input class="form-control" id="email" name="email" placeholder="Mail" type="email" required>
-                    </div>
-                </div>
-                <textarea class="form-control" id="comments" name="comments" placeholder="Mesaj" rows="5"></textarea>
-                <br>
-                <div class="row">
-                    <div class="col-sm-12 form-group">
-                        <button class="btn btn-default pull-right" type="submit">Gönder</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        const messageForm = document.getElementById('messageForm');
+        const messageList = document.getElementById('messageList');
+        const messageInput = document.getElementById('messageInput');
 
-    <!-- Footer -->
-    <footer class="container-fluid bg-4 text-center">
-        <p>Tüm Hakları Ortadadır. 2008 - 2017 </br><a href="http://www.cenkefepaydas.com">www.cenkefepaydas.com</a></p>
-        <i class="fa fa-instagram" aria-hidden="true"></i>
-        <i class="fa fa-github" aria-hidden="true"></i>
-        <i class="fa fa-skype" aria-hidden="true"></i>
-        <i class="fa fa-linkedin" aria-hidden="true"></i>
-    </footer>
+        // Load messages when the page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('get_messages.php')
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(message => {
+                        addMessageToDOM(message.message);
+                    });
+                });
+        });
+
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const messageText = messageInput.value.trim();
+
+            if (messageText !== "") {
+                // Send message to the server
+                fetch('submit_message.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `message=${encodeURIComponent(messageText)}`
+                })
+                .then(response => response.text())
+                .then(() => {
+                    addMessageToDOM(messageText);
+                    messageInput.value = ""; // Clear input field
+                });
+            }
+        });
+
+        function addMessageToDOM(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.textContent = message;
+
+            messageList.appendChild(messageDiv);
+        }
+    </script>
 
 </body>
-
 </html>
