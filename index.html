@@ -1,55 +1,125 @@
-```html
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cenk Efe Paydaş</title>
+    <title>Spin the Bottle</title>
     <style>
-        /* Sayfanın tümü için stil */
-        body, html {
-            height: 100%;
-            margin: 0;
+        body {
             font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f0f0;
-        }
-
-        /* Kart stil */
-        .card {
             text-align: center;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        /* Başlık ve metin için stil */
-        h1 {
             margin: 0;
-            font-size: 24px;
-            color: #333;
+            padding: 0;
+            background-color: #f0f8ff;
         }
 
-        p {
-            font-size: 18px;
-            color: #555;
+        .bottle-container {
+            margin-top: 100px;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bottle {
+            width: 40px;
+            height: 160px;
+            background-color: #0000FF;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            border-radius: 15px;
+        }
+
+        .bottle::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background-color: #000;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .bottle::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 15px;
+            background-color: #0000FF;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 8px;
+        }
+
+        button {
+            margin-top: 50px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        .email {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: #333;
         }
     </style>
 </head>
 <body>
-
-    <!-- Kart ve içerik -->
-    <div class="card">
-        <h1>Cenk Efe Paydaş</h1>
-        <p>cenkefe@paydas.org</p>
+    <h1>Spin the Bottle</h1>
+    <div class="bottle-container">
+        <div class="bottle" id="bottle"></div>
     </div>
+    <button onclick="spinBottle()">Spin the Bottle</button>
+    <div class="email">cenkpaydas@outlook.com</div>
 
+    <script>
+        let currentRotation = 0; // Mevcut toplam dönüş açısını saklamak için
+        let spinning = false; // Döndürme işlemi bitene kadar tekrar döndürme yapılmasın
+
+        function spinBottle() {
+            // Eğer döndürme işlemi devam ediyorsa, yeni bir döndürme başlatma
+            if (spinning) return;
+
+            spinning = true; // Döndürme başlatıldı
+
+            const bottle = document.getElementById("bottle");
+
+            // Rastgele bir son açı (0-360 derece arasında)
+            const finalRotation = Math.floor(Math.random() * 360);
+
+            // Şişeyi başlangıçta hızlı döndürmek için fazla tur ekliyoruz
+            const extraSpins = 5; // Ekstra tam tur
+            const totalRotation = currentRotation + extraSpins * 360 + finalRotation;
+
+            // Şişeyi döndür
+            bottle.style.transition = "transform 4s cubic-bezier(0.25, 1, 0.5, 1)"; // Yavaşlayarak durma animasyonu
+            bottle.style.transform = `translate(-50%, -50%) rotate(${totalRotation}deg)`;
+
+            // Yeni toplam dönüş açısını güncelle
+            currentRotation = totalRotation % 360; // 360'ı aşan dönüşleri normalize ediyoruz
+
+            // Animasyon bitince spinning durumunu sıfırlıyoruz
+            setTimeout(() => {
+                spinning = false;
+            }, 4000); // 4 saniye sonra spinning'i sıfırlıyoruz
+        }
+    </script>
 </body>
 </html>
-```
-
-Bu sayfayı bir `.html` dosyası olarak kaydedip tarayıcınızda açarak görüntüleyebilirsiniz.
