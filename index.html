@@ -1,53 +1,94 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paydaş - Finansal Yönetimi Basitleştirin</title>
+    <title>Paydas Portfolio - Financial Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .gradient-bg { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #f0fdfa 0%, #e2e8f0 100%); }
+        /* Custom turquoise tone matching the logo */
+        .text-turkuaz { color: #0d9488; }
+        .bg-turkuaz { background-color: #0d9488; }
+        .border-turkuaz { border-color: #0d9488; }
     </style>
 </head>
 <body class="bg-white text-gray-900">
 
-    <nav class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
-        <div class="text-2xl font-bold text-blue-600 tracking-tighter">PAYDAŞ</div>
-        <div class="hidden md:flex space-x-8 font-medium text-gray-600">
-            <a href="is-akisi.html" class="hover:text-blue-600 transition">1. İş Akışı</a>
-            <a href="istatistikler.html" class="hover:text-blue-600 transition">2. İstatistikler</a>
-            <a href="makaleler.html" class="hover:text-blue-600 transition">3. Makaleler</a>
+    <nav class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+        <div class="flex items-center space-x-3">
+            <img src="IMG_4187.jpg" alt="Paydas Logo" class="h-12 w-auto" style="filter: hue-rotate(100deg) saturate(1.5);">
+            <div class="text-2xl font-bold text-turkuaz tracking-tighter">PAYDAS PORTFOLIO</div>
         </div>
-        <a href="kayit.html" class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition shadow-lg">4. Başla</a>
+        <div class="hidden md:flex space-x-8 font-medium text-gray-600">
+            <a href="workflow.html" class="hover:text-turkuaz transition">Workflow</a>
+            <a href="statistics.html" class="hover:text-turkuaz transition">Statistics</a>
+            <a href="articles.html" class="hover:text-turkuaz transition">Articles</a>
+        </div>
+        <a href="register.html" class="bg-turkuaz text-white px-6 py-2 rounded-full hover:opacity-90 transition shadow-md">Get Started</a>
     </nav>
 
-    <header class="text-center py-20 px-4 gradient-bg border-b">
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Para akışınızı <span class="text-blue-600">basitleştirin</span></h1>
+    <header class="text-center py-24 px-4 gradient-bg border-b">
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Simplify your <span class="text-turkuaz">financial flow</span></h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-            İşletmenizin finansal yönetimini modernize edin. Bilgisayar Mühendisliği hassasiyetiyle geliştirildi.
+            We are redesigning personal and corporate financial management with a modern perspective. With Paydas Portfolio, everything is under your control.
         </p>
         <div class="flex justify-center space-x-4">
-            <a href="kayit.html" class="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">5. Hemen Başla</a>
-            <a href="demo.html" class="border border-gray-300 px-8 py-3 rounded-lg font-semibold bg-white hover:bg-gray-50 transition">6. Demo İste</a>
+            <a href="register.html" class="bg-gray-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-black transition">Start Now</a>
+            <a href="demo.html" class="border border-gray-300 px-8 py-3 rounded-lg font-semibold bg-white hover:bg-gray-50 transition">Request Demo</a>
+        </div>
+        <div class="mt-16 max-w-5xl mx-auto shadow-2xl rounded-2xl overflow-hidden border-4 border-white">
+            <img src="https://via.placeholder.com/1200x600/0d9488/ffffff?text=Paydas+Portfolio+Dashboard" alt="Dashboard Preview" class="w-full">
         </div>
     </header>
+
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="grid md:grid-cols-3 gap-12 text-center">
+                <div class="p-8">
+                    <div class="text-turkuaz text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold mb-2">Secure Infrastructure</h3>
+                    <p class="text-gray-500 text-sm">Your data is protected with top-tier encryption standards.</p>
+                </div>
+                <div class="p-8">
+                    <div class="text-turkuaz text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-2">Real-Time Analysis</h3>
+                    <p class="text-gray-500 text-sm">Track your expenses and investments with real-time charts.</p>
+                </div>
+                <div class="p-8">
+                    <div class="text-turkuaz text-4xl mb-4">☁️</div>
+                    <h3 class="text-xl font-bold mb-2">Cloud Synchronization</h3>
+                    <p class="text-gray-500 text-sm">Instantly access your wallet from all your devices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50 border-y">
+        <div class="max-w-5xl mx-auto px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Why Paydas Portfolio?</h2>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                Instead of complex spreadsheets and confusing bank statements, we offer a clean interface that shows only what you need. The path to financial freedom starts with knowing exactly what you spend.
+            </p>
+        </div>
+    </section>
 
     <footer class="bg-gray-900 text-white py-16 px-8">
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div>
-                <h2 class="text-3xl font-bold mb-4">Geleceğin finansına hazır mısınız?</h2>
-                <p class="text-gray-400">Paydaş ile verileriniz güvende, operasyonlarınız hızlı.</p>
+                <div class="text-2xl font-bold mb-4 text-turkuaz italic">PAYDAS PORTFOLIO</div>
+                <p class="text-gray-400">Use the financial management tools of the future, today.</p>
             </div>
-            <div class="flex flex-wrap gap-4 justify-md-end">
-                <a href="kullanim-sartlari.html" class="text-gray-400 hover:text-white border-b border-gray-700 pb-1">7. Kullanım Şartları</a>
-                <a href="gizlilik.html" class="text-gray-400 hover:text-white border-b border-gray-700 pb-1">8. Gizlilik Politikası</a>
-                <a href="iletisim.html" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">9. Bize Ulaşın</a>
+            <div class="flex flex-wrap gap-6 justify-md-end">
+                <a href="terms.html" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                <a href="privacy.html" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                <a href="contact.html" class="bg-turkuaz text-white px-6 py-2 rounded-lg hover:opacity-90 transition">Contact Us</a>
             </div>
         </div>
         <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-            © 2026 Paydaş Project | Ankara Medipol Üniversitesi Ar-Ge
+            © 2026 Paydas Portfolio | All Rights Reserved.
         </div>
     </footer>
 
