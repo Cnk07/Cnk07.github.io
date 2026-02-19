@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow - Paydas Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .text-turkuaz { color: #0d9488; }
+        .bg-turkuaz { background-color: #0d9488; }
+        .border-turkuaz { border-color: #0d9488; }
+        .workflow-step:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <nav class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto bg-white shadow-sm">
+        <div class="flex items-center space-x-3">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="IMG_4187.jpg" alt="Paydas Logo" class="h-10 w-auto" style="filter: hue-rotate(100deg) saturate(1.5);">
+                <div class="text-xl font-bold text-turkuaz tracking-tighter">PAYDAS PORTFOLIO</div>
+            </a>
+        </div>
+        <div class="hidden md:flex space-x-8 font-medium text-gray-600 text-sm">
+            <a href="index.html" class="hover:text-turkuaz transition">Home</a>
+            <a href="workflow.html" class="text-turkuaz">Workflow</a>
+            <a href="statistics.html" class="hover:text-turkuaz transition">Statistics</a>
+            <a href="articles.html" class="hover:text-turkuaz transition">Articles</a>
+        </div>
+    </nav>
+
+    <section class="py-16 bg-white border-b text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Our <span class="text-turkuaz">Workflow</span></h1>
+        <p class="text-gray-500 max-w-xl mx-auto text-lg">
+            High-performance financial management through automated systems and advanced data architecture.
+        </p>
+    </section>
+
+    <main class="max-w-5xl mx-auto py-20 px-8">
+        <div class="space-y-12">
+            
+            <div class="workflow-step flex flex-col md:flex-row items-center gap-8 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-16 h-16 bg-turkuaz text-white rounded-full flex items-center justify-center text-2xl font-bold shrink-0">01</div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-2">Data Integration & Aggregation</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        We leverage secure APIs to consolidate your financial data from multiple sources into a single, unified database. Our system ensures high-availability and real-time synchronization across all your assets.
+                    </p>
+                </div>
+            </div>
+
+            <div class="workflow-step flex flex-col md:flex-row items-center gap-8 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-16 h-16 border-2 border-turkuaz text-turkuaz rounded-full flex items-center justify-center text-2xl font-bold shrink-0">02</div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-2">Automated Risk Analysis</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Using advanced algorithms, Paydas Portfolio analyzes your spending patterns and investment volatility. We provide a comprehensive risk score to help you maintain a balanced and sustainable financial portfolio.
+                    </p>
+                </div>
+            </div>
+
+            <div class="workflow-step flex flex-col md:flex-row items-center gap-8 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-16 h-16 bg-turkuaz text-white rounded-full flex items-center justify-center text-2xl font-bold shrink-0">03</div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-2">Dynamic Reporting & Visualization</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Data is transformed into actionable insights through our intuitive dashboard. With clean visualizations and performance metrics, you can monitor your growth and optimize your cash flow with precision.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-20 text-center bg-gray-900 text-white p-12 rounded-3xl shadow-xl">
+            <h2 class="text-3xl font-bold mb-4">Ready to automate your finances?</h2>
+            <p class="text-gray-400 mb-8">Experience the seamless transition to modern portfolio management.</p>
+            <a href="register.html" class="bg-turkuaz text-white px-10 py-4 rounded-xl font-bold hover:opacity-90 transition inline-block">Initialize Setup</a>
+        </div>
+    </main>
+
+    <footer class="bg-white py-12 px-8 border-t text-center text-gray-400 text-sm">
+        © 2026 Paydas Portfolio | All Rights Reserved.
+    </footer>
+
+</body>
+</html>
