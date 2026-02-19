@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics - Paydas Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .text-turkuaz { color: #0d9488; }
+        .bg-turkuaz { background-color: #0d9488; }
+        .border-turkuaz { border-color: #0d9488; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
+
+    <nav class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto w-full bg-white shadow-sm relative z-10">
+        <div class="flex items-center space-x-3">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="IMG_4187.jpg" alt="Paydas Logo" class="h-10 w-auto" style="filter: hue-rotate(100deg) saturate(1.5);">
+                <div class="text-xl font-bold text-turkuaz tracking-tighter">PAYDAS PORTFOLIO</div>
+            </a>
+        </div>
+        <div class="hidden md:flex space-x-8 font-medium text-gray-600 text-sm">
+            <a href="index.html" class="hover:text-turkuaz transition">Home</a>
+            <a href="workflow.html" class="hover:text-turkuaz transition">Workflow</a>
+            <a href="statistics.html" class="text-turkuaz font-semibold">Statistics</a>
+            <a href="articles.html" class="hover:text-turkuaz transition">Articles</a>
+        </div>
+    </nav>
+
+    <section class="py-16 bg-white border-b text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Data-Driven <span class="text-turkuaz">Impact</span></h1>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg">
+            See how Paydas Portfolio drastically reduces operational time, optimizes overall money processing, and makes tax calculations effortless.
+        </p>
+    </section>
+
+    <main class="flex-grow max-w-7xl mx-auto py-12 px-8 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <div class="text-5xl font-bold text-turkuaz mb-2">85%</div>
+                <h3 class="text-lg font-semibold text-gray-800">Less Time Processing</h3>
+                <p class="text-sm text-gray-500 mt-2">Reduction in manual data entry.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <div class="text-5xl font-bold text-turkuaz mb-2">Zero</div>
+                <h3 class="text-lg font-semibold text-gray-800">Calculation Errors</h3>
+                <p class="text-sm text-gray-500 mt-2">Automated tax and balance tracking.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <div class="text-5xl font-bold text-turkuaz mb-2">3x</div>
+                <h3 class="text-lg font-semibold text-gray-800">Faster Tax Filing</h3>
+                <p class="text-sm text-gray-500 mt-2">Export ready-to-use tax reports instantly.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <h3 class="text-2xl font-bold mb-2">Overall Money Processing Time</h3>
+                <p class="text-gray-500 text-sm mb-6">Hours spent managing finances per month (Traditional vs. Paydas)</p>
+                <canvas id="processChart" height="250"></canvas>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <h3 class="text-2xl font-bold mb-2">Tax Calculation Efficiency</h3>
+                <p class="text-gray-500 text-sm mb-6">Comparing manual spreadsheets to Paydas automated algorithms.</p>
+                <canvas id="taxChart" height="250"></canvas>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8 border-t text-center text-gray-400 text-sm mt-auto">
+        © 2026 Paydas Portfolio | All Rights Reserved.
+    </footer>
+
+    <script>
+        // Chart 1: Money Processing (Line Chart)
+        const ctxProcess = document.getElementById('processChart').getContext('2d');
+        new Chart(ctxProcess, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [
+                    {
+                        label: 'Traditional Methods (Hours)',
+                        data: [12, 15, 14, 20],
+                        borderColor: '#9ca3af', // Gray
+                        backgroundColor: 'rgba(156, 163, 175, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Paydas Portfolio (Hours)',
+                        data: [3, 2, 2.5, 3],
+                        borderColor: '#0d9488', // Turquoise
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Chart 2: Tax Calculation Efficiency (Bar Chart)
+        const ctxTax = document.getElementById('taxChart').getContext('2d');
+        new Chart(ctxTax, {
+            type: 'bar',
+            data: {
+                labels: ['Data Gathering', 'Categorization', 'Deduction Calc', 'Final Review'],
+                datasets: [
+                    {
+                        label: 'Manual Process',
+                        data: [8, 10, 6, 4],
+                        backgroundColor: '#e5e7eb' // Light Gray
+                    },
+                    {
+                        label: 'Paydas Automation',
+                        data: [1, 0.5, 0.2, 1],
+                        backgroundColor: '#0d9488' // Turquoise
+                    }
+                ]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+    </script>
+
+</body>
+</html>
