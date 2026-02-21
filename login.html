@@ -58,6 +58,8 @@
                         <input id="password" name="password" type="password" autocomplete="current-password" required 
                             class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus-ring-turkuaz sm:text-sm transition">
                     </div>
+                        <p id="error-message" class="hidden mt-2 text-sm text-red-600 font-medium"></p>
+                    </div>
                 </div>
 
                 <div>
@@ -66,6 +68,7 @@
                         Access Workspace
                     </button>
                 </div>
+                
             </form>
 
             <div class="mt-6">
@@ -89,23 +92,27 @@
 
         // 2. ⚠️ PASTE YOUR FIREBASE CONFIG HERE ⚠️
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+        authDomain: "paydas-potrfolio.firebaseapp.com",
+        projectId: "paydas-potrfolio",
+        storageBucket: "paydas-potrfolio.firebasestorage.app",
+        messagingSenderId: "1064349640309",
+        appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
         };
 
         // 3. Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // 4. Connect to the HTML form
+       // 4. Connect to the HTML form and the new error message text
         const loginForm = document.getElementById('loginForm');
+        const errorMessageEl = document.getElementById('error-message');
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault(); 
+
+            // Hide any previous errors when the user tries typing again
+            errorMessageEl.classList.add('hidden');
 
             // Grab inputs
             const email = document.getElementById('email').value.trim();
@@ -122,11 +129,14 @@
                     window.location.href = "dashboard.html"; 
                 })
                 .catch((error) => {
-                    // Fail! Wrong password or user doesn't exist
-                    alert("Access Denied: Invalid email or password.");
-                    submitButton.innerText = "Access Workspace"; // Reset button
+                    // Fail! Inject the exact error message and reveal the red text
+                    errorMessageEl.innerText = "Invalid email or password. Please try again.";
+                    errorMessageEl.classList.remove('hidden');
+                    
+                    submitButton.innerText = "Access Workspace"; // Reset button so they can try again
                 });
         });
+    </script>
     </script>
 </body>
 </html>
