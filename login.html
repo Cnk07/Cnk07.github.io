@@ -84,18 +84,20 @@
         </div>
     </div>
 
-    <script type="module">
+<script type="module">
+        // 1. ALL IMPORTS MUST BE AT THE VERY TOP
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         // ⚠️ PASTE YOUR FIREBASE CONFIG KEYS HERE ⚠️
         const firebaseConfig = {
-        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
-        authDomain: "paydas-potrfolio.firebaseapp.com",
-        projectId: "paydas-potrfolio",
-        storageBucket: "paydas-potrfolio.firebasestorage.app",
-        messagingSenderId: "1064349640309",
-        appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
+              apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+              authDomain: "paydas-potrfolio.firebaseapp.com",
+              projectId: "paydas-potrfolio",
+              storageBucket: "paydas-potrfolio.firebasestorage.app",
+              messagingSenderId: "1064349640309",
+              appId: "1:1064349640309:web:06e113a6cc7343db313a3c",
+              measurementId: "G-NM2CVJWHS5"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -104,10 +106,9 @@
         const loginForm = document.getElementById('loginForm');
         const errorMessageEl = document.getElementById('error-message');
 
+        // --- LOGIN LOGIC ---
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault(); 
-
-            // Hide any previous errors
             errorMessageEl.classList.add('hidden');
 
             const email = document.getElementById('email').value.trim();
@@ -118,31 +119,27 @@
 
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // Success! Redirect to dashboard
                     window.location.href = "dashboard.html"; 
                 })
                 .catch((error) => {
-                    // Fail! Reveal the red warning text under the password
+                    errorMessageEl.classList.remove('text-turkuaz');
+                    errorMessageEl.classList.add('text-red-600');
                     errorMessageEl.innerText = "Invalid email or password. Please try again.";
                     errorMessageEl.classList.remove('hidden');
-                    submitButton.innerText = "Access Workspace"; // Reset button
+                    submitButton.innerText = "Access Workspace"; 
                 });
-            
         });
-        // 1. UPDATE THIS IMPORT LINE AT THE TOP OF THE SCRIPT
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // ... (Keep your config and loginForm logic exactly the same) ...
-
-        // 2. PASTE THIS AT THE VERY BOTTOM, JUST BEFORE </script>
+        // --- FORGOT PASSWORD LOGIC ---
         const forgotPasswordLink = document.getElementById('forgot-password');
         
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
             const emailInput = document.getElementById('email').value.trim();
-            const errorMessageEl = document.getElementById('error-message');
 
             if (!emailInput) {
+                errorMessageEl.classList.remove('text-turkuaz');
+                errorMessageEl.classList.add('text-red-600');
                 errorMessageEl.innerText = "Please type your email address into the box first, then click 'Forgot your password?'.";
                 errorMessageEl.classList.remove('hidden');
                 return;
@@ -151,18 +148,13 @@
             sendPasswordResetEmail(auth, emailInput)
                 .then(() => {
                     errorMessageEl.classList.remove('text-red-600');
-                    errorMessageEl.classList.add('text-turkuaz'); // Make it green for success
+                    errorMessageEl.classList.add('text-turkuaz'); 
                     errorMessageEl.innerText = "A password reset link has been sent to your email!";
                     errorMessageEl.classList.remove('hidden');
                 })
                 .catch((error) => {
-                    errorMessageEl.classList.add('text-red-600');
                     errorMessageEl.classList.remove('text-turkuaz');
-                    errorMessageEl.innerText = "Error sending reset email: " + error.message;
-                    errorMessageEl.classList.remove('hidden');
-                });
-        });
-        
+                    errorMessageEl.classList.add('text-red-6
     </script>
 </body>
 </html>
