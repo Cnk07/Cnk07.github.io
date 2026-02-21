@@ -119,23 +119,37 @@
     // 4. Connect to the HTML form
     const registerForm = document.querySelector('form');
 
+    // Industry-standard Regex for valid email formats (requires a proper domain like .com, .net, .org, etc.)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     registerForm.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevents the page from refreshing instantly
 
         // Grab the values the user typed in
-        const email = document.getElementById('email').value;
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
+        const submitButton = registerForm.querySelector('button[type="submit"]');
+
+        // --- NEW: STRICT EMAIL VALIDATION ---
+        if (!emailRegex.test(email)) {
+            alert("Access Denied: Please enter a valid email format (e.g., name@company.com).");
+            // Highlight the input box in red so the user knows where the error is
+            document.getElementById('email').classList.add('border-red-500', 'focus:ring-red-500');
+            return; // STOP the function here. Do not send to Firebase.
+        }
+        
+        // Remove the red border if they fix it and try again
+        document.getElementById('email').classList.remove('border-red-500', 'focus:ring-red-500');
+        // ------------------------------------
 
         // Change the button text so the user knows it's loading
-        const submitButton = registerForm.querySelector('button[type="submit"]');
         submitButton.innerText = "Processing...";
 
         // 5. Send data to Firebase
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-        // Redirect instantly to the beautiful new success screen
+                // Redirect instantly to the beautiful new success screen
                 window.location.href = "success.html"; 
-            })
             })
             .catch((error) => {
                 // Fail! Something went wrong (e.g., password too weak, email already exists)
