@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Paydas Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen hidden" id="secure-body">
+    <h1 class="text-3xl font-bold mb-4">Welcome to the Secure Dashboard!</h1>
+    <p class="text-gray-600 mb-8" id="user-email-display">Loading user data...</p>
+
+    <button id="logout-btn" class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700">Log Out</button>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // ⚠️ PASTE YOUR EXACT FIREBASE CONFIG HERE ⚠️
+        const firebaseConfig = {
+        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+        authDomain: "paydas-potrfolio.firebaseapp.com",
+        projectId: "paydas-potrfolio",
+        storageBucket: "paydas-potrfolio.firebasestorage.app",
+        messagingSenderId: "1064349640309",
+        appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // AUTH GUARD: Checks if the user is actually logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is verified! Reveal the page and show their email.
+                document.getElementById('secure-body').classList.remove('hidden');
+                document.getElementById('user-email-display').innerText = "Logged in as: " + user.email;
+            } else {
+                // Intruder detected. Kick them immediately to login.
+                window.location.replace("login.html");
+            }
+        });
+
+        // Setup Logout Button
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                // Kicks them back to the login screen after signing out
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>
