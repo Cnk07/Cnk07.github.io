@@ -58,8 +58,8 @@
                         <input id="password" name="password" type="password" autocomplete="current-password" required 
                             class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus-ring-turkuaz sm:text-sm transition">
                     </div>
-                        <p id="error-message" class="hidden mt-2 text-sm text-red-600 font-medium"></p>
-                    </div>
+                    
+                    <p id="error-message" class="hidden mt-2 text-sm text-red-600 font-medium"></p>
                 </div>
 
                 <div>
@@ -68,7 +68,6 @@
                         Access Workspace
                     </button>
                 </div>
-                
             </form>
 
             <div class="mt-6">
@@ -86,11 +85,10 @@
     </div>
 
     <script type="module">
-        // 1. Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // 2. ⚠️ PASTE YOUR FIREBASE CONFIG HERE ⚠️
+        // ⚠️ PASTE YOUR FIREBASE CONFIG KEYS HERE ⚠️
         const firebaseConfig = {
         apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
         authDomain: "paydas-potrfolio.firebaseapp.com",
@@ -100,43 +98,36 @@
         appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
         };
 
-        // 3. Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-       // 4. Connect to the HTML form and the new error message text
         const loginForm = document.getElementById('loginForm');
         const errorMessageEl = document.getElementById('error-message');
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault(); 
 
-            // Hide any previous errors when the user tries typing again
+            // Hide any previous errors
             errorMessageEl.classList.add('hidden');
 
-            // Grab inputs
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const submitButton = loginForm.querySelector('button[type="submit"]');
 
-            // Button loading state
             submitButton.innerText = "Authenticating...";
 
-            // 5. Authenticate with Firebase
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // Success! Redirect to the private dashboard
+                    // Success! Redirect to dashboard
                     window.location.href = "dashboard.html"; 
                 })
                 .catch((error) => {
-                    // Fail! Inject the exact error message and reveal the red text
+                    // Fail! Reveal the red warning text under the password
                     errorMessageEl.innerText = "Invalid email or password. Please try again.";
                     errorMessageEl.classList.remove('hidden');
-                    
-                    submitButton.innerText = "Access Workspace"; // Reset button so they can try again
+                    submitButton.innerText = "Access Workspace"; // Reset button
                 });
         });
-    </script>
     </script>
 </body>
 </html>
