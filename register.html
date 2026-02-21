@@ -133,12 +133,9 @@
         // 5. Send data to Firebase
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Success! The account is created.
-                const user = userCredential.user;
-                alert("Account created successfully! Welcome to Paydas Portfolio.");
-                
-                // Redirect the user to the homepage (or a dashboard)
-                window.location.href = "index.html"; 
+        // Redirect instantly to the beautiful new success screen
+                window.location.href = "success.html"; 
+            })
             })
             .catch((error) => {
                 // Fail! Something went wrong (e.g., password too weak, email already exists)
