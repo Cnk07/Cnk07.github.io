@@ -83,21 +83,19 @@
 
         </div>
     </div>
-
 <script type="module">
-        // 1. ALL IMPORTS MUST BE AT THE VERY TOP
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         // ⚠️ PASTE YOUR FIREBASE CONFIG KEYS HERE ⚠️
         const firebaseConfig = {
-              apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
-              authDomain: "paydas-potrfolio.firebaseapp.com",
-              projectId: "paydas-potrfolio",
-              storageBucket: "paydas-potrfolio.firebasestorage.app",
-              messagingSenderId: "1064349640309",
-              appId: "1:1064349640309:web:06e113a6cc7343db313a3c",
-              measurementId: "G-NM2CVJWHS5"
+          apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+          authDomain: "paydas-potrfolio.firebaseapp.com",
+          projectId: "paydas-potrfolio",
+          storageBucket: "paydas-potrfolio.firebasestorage.app",
+          messagingSenderId: "1064349640309",
+          appId: "1:1064349640309:web:06e113a6cc7343db313a3c",
+          measurementId: "G-NM2CVJWHS5"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -154,7 +152,11 @@
                 })
                 .catch((error) => {
                     errorMessageEl.classList.remove('text-turkuaz');
-                    errorMessageEl.classList.add('text-red-6
+                    errorMessageEl.classList.add('text-red-600');
+                    errorMessageEl.innerText = "Error sending reset email: " + error.message;
+                    errorMessageEl.classList.remove('hidden');
+                });
+        });
     </script>
 </body>
 </html>
