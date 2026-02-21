@@ -97,6 +97,56 @@
 
         </div>
     </div>
+<script type="module">
+    // 1. Import the required Firebase modules from the CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+    // 2. PASTE YOUR CONFIG HERE (Replace this placeholder object with the one from Step 1)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+        authDomain: "paydas-potrfolio.firebaseapp.com",
+        projectId: "paydas-potrfolio",
+        storageBucket: "paydas-potrfolio.firebasestorage.app",
+        messagingSenderId: "1064349640309",
+        appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
+    };
+
+    // 3. Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 4. Connect to the HTML form
+    const registerForm = document.querySelector('form');
+
+    registerForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevents the page from refreshing instantly
+
+        // Grab the values the user typed in
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Change the button text so the user knows it's loading
+        const submitButton = registerForm.querySelector('button[type="submit"]');
+        submitButton.innerText = "Processing...";
+
+        // 5. Send data to Firebase
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Success! The account is created.
+                const user = userCredential.user;
+                alert("Account created successfully! Welcome to Paydas Portfolio.");
+                
+                // Redirect the user to the homepage (or a dashboard)
+                window.location.href = "index.html"; 
+            })
+            .catch((error) => {
+                // Fail! Something went wrong (e.g., password too weak, email already exists)
+                const errorMessage = error.message;
+                alert("Registration Error: " + errorMessage);
+                submitButton.innerText = "Initialize Workspace"; // Reset button
+            });
+    });
+</script>
 </body>
 </html>
