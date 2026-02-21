@@ -51,7 +51,7 @@
                     <div class="flex items-center justify-between">
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                         <div class="text-sm">
-                            <a href="#" class="font-medium text-turkuaz hover:text-teal-700">Forgot your password?</a>
+                            <a href="#" id="forgot-password" class="font-medium text-turkuaz hover:text-teal-700">Forgot your password?</a>
                         </div>
                     </div>
                     <div class="mt-1">
@@ -127,7 +127,42 @@
                     errorMessageEl.classList.remove('hidden');
                     submitButton.innerText = "Access Workspace"; // Reset button
                 });
+            
         });
+        // 1. UPDATE THIS IMPORT LINE AT THE TOP OF THE SCRIPT
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // ... (Keep your config and loginForm logic exactly the same) ...
+
+        // 2. PASTE THIS AT THE VERY BOTTOM, JUST BEFORE </script>
+        const forgotPasswordLink = document.getElementById('forgot-password');
+        
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('email').value.trim();
+            const errorMessageEl = document.getElementById('error-message');
+
+            if (!emailInput) {
+                errorMessageEl.innerText = "Please type your email address into the box first, then click 'Forgot your password?'.";
+                errorMessageEl.classList.remove('hidden');
+                return;
+            }
+
+            sendPasswordResetEmail(auth, emailInput)
+                .then(() => {
+                    errorMessageEl.classList.remove('text-red-600');
+                    errorMessageEl.classList.add('text-turkuaz'); // Make it green for success
+                    errorMessageEl.innerText = "A password reset link has been sent to your email!";
+                    errorMessageEl.classList.remove('hidden');
+                })
+                .catch((error) => {
+                    errorMessageEl.classList.add('text-red-600');
+                    errorMessageEl.classList.remove('text-turkuaz');
+                    errorMessageEl.innerText = "Error sending reset email: " + error.message;
+                    errorMessageEl.classList.remove('hidden');
+                });
+        });
+        
     </script>
 </body>
 </html>
