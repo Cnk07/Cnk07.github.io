@@ -11,155 +11,144 @@
         .text-turkuaz { color: #0d9488; }
         .bg-turkuaz { background-color: #0d9488; }
         .border-turkuaz { border-color: #0d9488; }
-        /* Custom focus ring for form inputs */
-        .focus-ring-turkuaz:focus { 
-            outline: none; 
-            border-color: #0d9488; 
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2); 
-        }
+        .focus-ring-turkuaz:focus { outline: none; border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2); }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 
     <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <a href="index.html" class="inline-flex items-center space-x-3 justify-center">
-            <svg class="h-14 w-auto text-turkuaz" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.352-.272-2.64-.759-3.818a.75.75 0 00-.637-.442 11.209 11.209 0 01-7.844-3.32zM12 4.405a12.712 12.712 0 006.033 2.597c.357 1.033.55 2.133.55 3.281 0 4.977-3.298 9.222-7.852 10.578-4.554-1.356-7.851-5.6-7.851-10.578 0-1.148.193-2.248.55-3.281A12.712 12.712 0 0012 4.405z" clip-rule="evenodd" />
-</svg>
-            <span class="text-2xl font-bold text-turkuaz tracking-tighter">PAYDAS PORTFOLIO</span>
+        <a href="index.html" class="inline-flex items-center space-x-3 justify-center mb-2">
+            <img src="logo.jpg" alt="Paydas Logo" class="h-12 w-auto object-contain">
         </a>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-        </h2>
-       <p class="mt-2 text-center text-sm text-gray-600">
-            Or
-            <a href="login.html" class="font-medium text-turkuaz hover:text-teal-700 transition">
-                sign in to your existing account
-            </a>
-            </p>
+        <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900 tracking-tight">Create your account</h2>
+        <p class="mt-2 text-center text-sm text-gray-600">Or <a href="login.html" class="font-medium text-turkuaz hover:text-teal-700 transition">sign in to your existing account</a></p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow-xl shadow-gray-200/50 sm:rounded-2xl sm:px-10 border border-gray-100">
-            <form class="space-y-6" action="#" method="POST">
+            <form id="registerForm" class="space-y-5">
                 
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                     <div class="mt-1">
-                        <input id="name" name="name" type="text" autocomplete="name" required 
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus-ring-turkuaz sm:text-sm transition">
+                        <input id="username" type="text" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus-ring-turkuaz sm:text-sm transition">
                     </div>
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                     <div class="mt-1">
-                        <input id="email" name="email" type="email" autocomplete="email" required 
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus-ring-turkuaz sm:text-sm transition">
+                        <input id="email" type="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus-ring-turkuaz sm:text-sm transition">
                     </div>
                 </div>
 
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <div class="mt-1">
-                        <input id="password" name="password" type="password" autocomplete="new-password" required 
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus-ring-turkuaz sm:text-sm transition">
+                        <input id="password" type="password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus-ring-turkuaz sm:text-sm transition">
                     </div>
-                    <p class="mt-2 text-xs text-gray-500">Must be at least 8 characters long and include a symbol.</p>
-                </div>
-
-                <div class="flex items-center">
-                    <input id="terms" name="terms" type="checkbox" required 
-                        class="h-4 w-4 text-turkuaz focus:ring-teal-500 border-gray-300 rounded cursor-pointer">
-                    <label for="terms" class="ml-2 block text-sm text-gray-900 cursor-pointer">
-                        I agree to the 
-                        <a href="terms.html" class="text-turkuaz hover:underline">Terms of Service</a> and 
-                        <a href="privacy.html" class="text-turkuaz hover:underline">Privacy Policy</a>.
-                    </label>
+                    <p class="mt-1 text-xs text-gray-500">Min. 8 characters and at least 1 symbol (!@#$%^&*).</p>
                 </div>
 
                 <div>
-                    <button type="submit" 
-                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-turkuaz hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition">
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <div class="mt-1">
+                        <input id="confirm-password" type="password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus-ring-turkuaz sm:text-sm transition">
+                    </div>
+                    <p id="register-error" class="hidden mt-2 text-sm text-red-600 font-medium"></p>
+                </div>
+
+                <div class="flex items-center">
+                    <input id="terms" type="checkbox" required class="h-4 w-4 text-turkuaz focus:ring-teal-500 border-gray-300 rounded cursor-pointer">
+                    <label for="terms" class="ml-2 block text-sm text-gray-900 cursor-pointer">I agree to the <a href="terms.html" class="text-turkuaz hover:underline">Terms of Service</a>.</label>
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-turkuaz hover:bg-teal-700 transition">
                         Initialize Workspace
                     </button>
                 </div>
             </form>
-
-            <div class="mt-6">
-                <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Secure AES-256 Encryption</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
-<script type="module">
-    // 1. Import the required Firebase modules from the CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // 2. PASTE YOUR CONFIG HERE (Replace this placeholder object with the one from Step 1)
-    const firebaseConfig = {
-        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
-        authDomain: "paydas-potrfolio.firebaseapp.com",
-        projectId: "paydas-potrfolio",
-        storageBucket: "paydas-potrfolio.firebasestorage.app",
-        messagingSenderId: "1064349640309",
-        appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
-    };
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        // Notice we imported updateProfile and sendEmailVerification here:
+        import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // 3. Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        // ⚠️ PASTE YOUR FIREBASE CONFIG HERE ⚠️
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-    // 4. Connect to the HTML form
-    const registerForm = document.querySelector('form');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    // Industry-standard Regex for valid email formats (requires a proper domain like .com, .net, .org, etc.)
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const registerForm = document.getElementById('registerForm');
+        const errorEl = document.getElementById('register-error');
 
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevents the page from refreshing instantly
+        // Regex: At least 8 chars long AND contains at least one special character
+        const passwordRegex = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        // Grab the values the user typed in
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const submitButton = registerForm.querySelector('button[type="submit"]');
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            errorEl.classList.add('hidden'); // Reset errors
 
-        // --- NEW: STRICT EMAIL VALIDATION ---
-        if (!emailRegex.test(email)) {
-            alert("Access Denied: Please enter a valid email format (e.g., name@company.com).");
-            // Highlight the input box in red so the user knows where the error is
-            document.getElementById('email').classList.add('border-red-500', 'focus:ring-red-500');
-            return; // STOP the function here. Do not send to Firebase.
-        }
-        
-        // Remove the red border if they fix it and try again
-        document.getElementById('email').classList.remove('border-red-500', 'focus:ring-red-500');
-        // ------------------------------------
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const submitButton = registerForm.querySelector('button[type="submit"]');
 
-        // Change the button text so the user knows it's loading
-        submitButton.innerText = "Processing...";
+            // 1. Validate Email format
+            if (!emailRegex.test(email)) {
+                errorEl.innerText = "Please enter a valid email format.";
+                errorEl.classList.remove('hidden');
+                return;
+            }
 
-        // 5. Send data to Firebase
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Redirect instantly to the beautiful new success screen
-                window.location.href = "success.html"; 
-            })
-            .catch((error) => {
-                // Fail! Something went wrong (e.g., password too weak, email already exists)
-                const errorMessage = error.message;
-                alert("Registration Error: " + errorMessage);
-                submitButton.innerText = "Initialize Workspace"; // Reset button
-            });
-    });
-</script>
+            // 2. Validate Password strength
+            if (!passwordRegex.test(password)) {
+                errorEl.innerText = "Password must be at least 8 characters and include a symbol.";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            // 3. Validate Passwords Match
+            if (password !== confirmPassword) {
+                errorEl.innerText = "Passwords do not match. Please try again.";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            submitButton.innerText = "Processing...";
+
+            // 4. Create User
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    
+                    // 5. Save the Username and Send Verification Link
+                    Promise.all([
+                        updateProfile(user, { displayName: username }),
+                        sendEmailVerification(user)
+                    ]).then(() => {
+                        window.location.href = "success.html"; 
+                    });
+                })
+                .catch((error) => {
+                    errorEl.innerText = "Error: " + error.message;
+                    errorEl.classList.remove('hidden');
+                    submitButton.innerText = "Initialize Workspace"; 
+                });
+        });
+    </script>
 </body>
 </html>
