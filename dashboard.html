@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Paydas Portfolio</title>
+    <title>Client Portal - Paydas Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -12,223 +13,193 @@
         .bg-turkuaz { background-color: #0d9488; }
     </style>
 </head>
-<body class="bg-gray-50 flex h-screen overflow-hidden hidden" id="secure-body">
-
-    <aside class="w-64 bg-gray-900 text-white flex flex-col h-full shadow-2xl z-20 hidden md:flex">
-        <div class="p-6 border-b border-gray-800 flex items-center space-x-3">
-            <img src="logo.jpg" alt="Paydas Logo" class="h-8 w-auto object-contain rounded bg-white p-0.5">
-            <span class="text-xl font-bold text-turkuaz italic tracking-tight">PAYDAS</span>
+<body class="bg-slate-50 flex h-screen overflow-hidden hidden" id="secure-body">
+    <aside class="w-64 bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 hidden md:flex">
+        <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
+            <div class="h-8 w-8 bg-turkuaz rounded flex items-center justify-center font-bold text-lg">P</div>
+            <span class="text-xl font-bold tracking-tight">PAYDAS</span>
         </div>
-        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
-            <a href="#" class="flex items-center space-x-3 bg-gray-800 text-turkuaz px-4 py-3 rounded-lg font-medium transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span>Overview</span>
+
+        <nav class="flex-grow p-4 space-y-2">
+            <a href="#" class="flex items-center space-x-3 bg-slate-800 text-turkuaz px-4 py-3 rounded-lg font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span>Portfolio Summary</span>
             </a>
-            <a href="#" class="flex items-center space-x-3 text-gray-400 hover:text-white hover:bg-gray-800 px-4 py-3 rounded-lg font-medium transition">
+            <a href="#" class="flex items-center space-x-3 text-slate-400 hover:text-white px-4 py-3 rounded-lg font-medium transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <span>Assets</span>
+                <span>Transactions</span>
             </a>
         </nav>
-        <div class="p-4 border-t border-gray-800">
-            <button id="logoutBtn" class="flex items-center justify-center space-x-2 w-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white px-4 py-3 rounded-lg font-bold transition">
+
+        <div class="p-4 border-t border-slate-800">
+            <button id="logoutBtn" class="flex items-center space-x-2 w-full text-slate-400 hover:text-white px-4 py-3 rounded-lg transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span>Secure Log Out</span>
+                <span>Sign Out</span>
             </button>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 relative">
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
         
-        <header class="bg-white border-b border-gray-200 p-6 flex justify-between items-center z-10">
+        <header class="bg-white border-b border-slate-200 p-6 flex justify-between items-center z-10 shadow-sm">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Workspace Overview</h1>
-                <p id="user-email-display" class="text-sm text-turkuaz font-medium mt-1">Authenticating...</p>
+                <h1 class="text-2xl font-bold text-slate-900">Dashboard</h1>
+                <p class="text-sm text-slate-500 mt-1">Welcome back, <span id="user-display" class="font-medium text-turkuaz">Loading...</span></p>
             </div>
-            <button id="openModalBtn" class="bg-turkuaz text-white px-5 py-2 rounded-lg font-bold hover:bg-teal-700 transition shadow-md">
-                + Add Asset
+            <button class="bg-turkuaz text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition shadow-md text-sm">
+                + New Trade
             </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+        <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <p class="text-sm font-medium text-gray-500 mb-1">Total Portfolio Value</p>
-                    <h3 id="totalValueDisplay" class="text-3xl font-bold text-gray-900">$0.00</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="text-sm font-medium text-slate-500 mb-1">Total Net Worth</p>
+                    <h3 class="text-3xl font-bold text-slate-900">$248,500.00</h3>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <p class="text-sm font-medium text-gray-500 mb-1">Active Assets</p>
-                    <h3 id="totalAssetsDisplay" class="text-3xl font-bold text-gray-900">0</h3>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="text-sm font-medium text-slate-500 mb-1">Daily Profit/Loss</p>
+                    <div class="flex items-baseline space-x-2">
+                        <h3 class="text-3xl font-bold text-green-600">+$1,240.50</h3>
+                        <span class="text-sm font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">+0.5%</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="text-sm font-medium text-slate-500 mb-1">Available Cash</p>
+                    <h3 class="text-3xl font-bold text-slate-900">$18,400.00</h3>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-900">Your Registered Assets</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 lg:col-span-1 flex flex-col">
+                    <h3 class="text-lg font-bold text-slate-900 mb-6">Asset Allocation</h3>
+                    <div class="flex-1 relative w-full flex justify-center items-center">
+                        <canvas id="allocationChart"></canvas>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
-                                <th class="px-6 py-4 font-medium">Asset Name</th>
-                                <th class="px-6 py-4 font-medium">Category</th>
-                                <th class="px-6 py-4 font-medium text-right">Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="assetsTableBody" class="divide-y divide-gray-100 text-sm">
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 lg:col-span-2 overflow-hidden flex flex-col">
+                    <div class="px-6 py-5 border-b border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-900">Open Positions</h3>
+                    </div>
+                    <div class="overflow-x-auto flex-1">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                    <th class="px-6 py-3 font-medium">Asset Name</th>
+                                    <th class="px-6 py-3 font-medium">Ticker</th>
+                                    <th class="px-6 py-3 font-medium text-right">Qty</th>
+                                    <th class="px-6 py-3 font-medium text-right">Current Price</th>
+                                    <th class="px-6 py-3 font-medium text-right">Total Value</th>
+                                    <th class="px-6 py-3 font-medium text-right">ROI</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm">
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="px-6 py-4 font-medium text-slate-900">Apple Inc.</td>
+                                    <td class="px-6 py-4 text-slate-500">AAPL</td>
+                                    <td class="px-6 py-4 text-right">150</td>
+                                    <td class="px-6 py-4 text-right">$185.00</td>
+                                    <td class="px-6 py-4 text-right font-medium text-slate-900">$27,750.00</td>
+                                    <td class="px-6 py-4 text-right text-green-600 font-medium">+12.4%</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="px-6 py-4 font-medium text-slate-900">Vanguard S&P 500 ETF</td>
+                                    <td class="px-6 py-4 text-slate-500">VOO</td>
+                                    <td class="px-6 py-4 text-right">200</td>
+                                    <td class="px-6 py-4 text-right">$450.20</td>
+                                    <td class="px-6 py-4 text-right font-medium text-slate-900">$90,040.00</td>
+                                    <td class="px-6 py-4 text-right text-green-600 font-medium">+8.2%</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="px-6 py-4 font-medium text-slate-900">Tesla Inc.</td>
+                                    <td class="px-6 py-4 text-slate-500">TSLA</td>
+                                    <td class="px-6 py-4 text-right">50</td>
+                                    <td class="px-6 py-4 text-right">$190.50</td>
+                                    <td class="px-6 py-4 text-right font-medium text-slate-900">$9,525.00</td>
+                                    <td class="px-6 py-4 text-right text-red-500 font-medium">-4.1%</td>
+                                </tr>
                             </tbody>
-                    </table>
-                    <p id="noAssetsMsg" class="text-center py-6 text-gray-500 hidden">You haven't added any assets yet.</p>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-        </div>
-
-        <div id="addAssetModal" class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-            <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
-                <h2 class="text-2xl font-bold mb-6 text-gray-900">Add New Asset</h2>
-                <form id="addAssetForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Asset Name</label>
-                        <input type="text" id="assetName" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Category</label>
-                        <select id="assetCategory" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg">
-                            <option value="Vehicle">Vehicle</option>
-                            <option value="Stocks">Stocks / ETF</option>
-                            <option value="Cash">Cash / Bank</option>
-                            <option value="Crypto">Cryptocurrency</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Estimated Value ($)</label>
-                        <input type="number" id="assetValue" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div class="flex space-x-3 mt-8">
-                        <button type="button" id="closeModalBtn" class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg font-bold hover:bg-gray-200">Cancel</button>
-                        <button type="submit" id="saveAssetBtn" class="flex-1 bg-turkuaz text-white py-2 rounded-lg font-bold hover:bg-teal-700">Save Asset</button>
-                    </div>
-                </form>
             </div>
         </div>
-
     </main>
 
     <script type="module">
+        // --- 1. FIREBASE AUTHENTICATION ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        // WE ADDED FIRESTORE IMPORTS HERE:
-        import { getFirestore, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ⚠️ PASTE YOUR FIREBASE CONFIG KEYS HERE ⚠️
         const firebaseConfig = {
-        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q", 
-            authDomain: "paydas-potrfolio.firebaseapp.com", 
-            projectId: "paydas-potrfolio", 
-            storageBucket: "paydas-potrfolio.firebasestorage.app", 
-            messagingSenderId: "1064349640309", 
-            appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
+apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q", authDomain: "paydas-potrfolio.firebaseapp.com", projectId: "paydas-potrfolio", storageBucket: "paydas-potrfolio.firebasestorage.app", messagingSenderId: "1064349640309", appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
 
-        let currentUserUID = null;
-
-        // --- AUTH GUARD ---
+        // Security Guard
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // Reveal dashboard and set name
                 document.getElementById('secure-body').classList.remove('hidden');
-                const displayName = user.displayName ? user.displayName : user.email;
-                document.getElementById('user-email-display').innerText = "Logged in as: " + displayName;
-                
-                currentUserUID = user.uid; // Save their secure ID
-                loadUserAssets(currentUserUID); // Boot up the real-time database listener
+                document.getElementById('user-display').innerText = user.displayName || user.email;
             } else {
+                // Eject unauthenticated users
                 window.location.replace("login.html");
             }
         });
 
-        // --- LOGOUT LOGIC ---
+        // Logout Logic
         document.getElementById('logoutBtn').addEventListener('click', () => {
             signOut(auth).then(() => window.location.href = "login.html");
         });
 
-        // --- MODAL LOGIC ---
-        const modal = document.getElementById('addAssetModal');
-        document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
-        document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
-
-        // --- SAVE NEW ASSET TO DATABASE ---
-        document.getElementById('addAssetForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const saveBtn = document.getElementById('saveAssetBtn');
-            saveBtn.innerText = "Saving...";
-
-            try {
-                await addDoc(collection(db, "assets"), {
-                    userId: currentUserUID, // This is how we securely tie the data to the user!
-                    name: document.getElementById('assetName').value,
-                    category: document.getElementById('assetCategory').value,
-                    value: parseFloat(document.getElementById('assetValue').value),
-                    timestamp: new Date().toISOString()
-                });
-                
-                document.getElementById('addAssetForm').reset();
-                modal.classList.add('hidden');
-            } catch (error) {
-                alert("Error saving asset: " + error.message);
-            } finally {
-                saveBtn.innerText = "Save Asset";
-            }
-        });
-
-        // --- REAL-TIME DATABASE LISTENER ---
-        function loadUserAssets(uid) {
-            // Ask Firestore ONLY for documents where the userId matches the logged-in user
-            const q = query(collection(db, "assets"), where("userId", "==", uid));
-
-            // onSnapshot means it listens in real-time forever until they log out
-            onSnapshot(q, (snapshot) => {
-                const tbody = document.getElementById('assetsTableBody');
-                const noAssetsMsg = document.getElementById('noAssetsMsg');
-                
-                tbody.innerHTML = ''; // Clear table
-                let totalValue = 0;
-                let assetCount = 0;
-
-                if (snapshot.empty) {
-                    noAssetsMsg.classList.remove('hidden');
-                } else {
-                    noAssetsMsg.classList.add('hidden');
-                    
-                    snapshot.forEach((doc) => {
-                        const asset = doc.data();
-                        totalValue += asset.value;
-                        assetCount++;
-                        
-                        // Build the HTML row dynamically
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-gray-50 transition";
-                        tr.innerHTML = `
-                            <td class="px-6 py-4 font-medium text-gray-900">${asset.name}</td>
-                            <td class="px-6 py-4 text-gray-500">
-                                <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-bold">${asset.category}</span>
-                            </td>
-                            <td class="px-6 py-4 text-right font-medium text-gray-900">$${asset.value.toLocaleString()}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+        // --- 2. CHART.JS INITIALIZATION ---
+        // We wait for the DOM to load to ensure the canvas exists
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('allocationChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Stocks', 'Mutual Funds', 'Commodities', 'Cash'],
+                    datasets: [{
+                        data: [55, 25, 10, 10],
+                        backgroundColor: [
+                            '#0d9488', // Turkuaz
+                            '#334155', // Slate 700
+                            '#94a3b8', // Slate 400
+                            '#ccfbf1'  // Teal 100
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: { family: "'Inter', sans-serif" }
+                            }
+                        }
+                    },
+                    cutout: '75%' // Makes it a sleek modern donut
                 }
-
-                // Update the big stat cards on the dashboard
-                document.getElementById('totalValueDisplay').innerText = "$" + totalValue.toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('totalAssetsDisplay').innerText = assetCount;
             });
-        }
+        });
     </script>
 </body>
 </html>
