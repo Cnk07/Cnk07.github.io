@@ -25,11 +25,22 @@
             <span class="text-xl font-bold tracking-tight">PAYDAS</span>
         </div>
 
-     <nav class="hidden md:flex space-x-6">
-    <a href="dashboard.html" class="text-slate-500 hover:text-turkuaz font-medium transition">Dashboard</a>
-    <a href="trade.html" class="text-turkuaz font-bold border-b-2 border-turkuaz pb-4 -mb-4">Trade Center</a>
-    <a href="reports.html" class="text-slate-500 hover:text-turkuaz font-medium transition">Reports</a>
-</nav>
+        <nav class="flex-grow p-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span>Portfolio Summary</span>
+            </a>
+            
+            <a href="tracker.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                <span>Portfolio Tracker</span>
+            </a>
+
+            <a href="reports.html" class="flex items-center space-x-3 bg-slate-800 text-turkuaz px-4 py-3 rounded-lg font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Reports & Analytics</span>
+            </a>
+        </nav>
 
         <div class="p-4 border-t border-slate-800">
             <button id="logoutBtn" class="flex items-center space-x-2 w-full text-slate-400 hover:text-white px-4 py-3 rounded-lg transition">
@@ -142,7 +153,11 @@
             if (user) {
                 document.getElementById('secure-body').classList.remove('hidden');
                 currentUserUID = user.uid;
-                loadTransactions(currentUserUID); // Fetch the live data
+                
+                // Fetch the live data. Note: Make sure the collection name here
+                // matches the one we used in tracker.html (e.g. "trades" or "transactions")
+                // Using "trades" here to match tracker.html logic
+                loadTransactions(currentUserUID); 
             } else {
                 window.location.replace("login.html");
             }
@@ -154,11 +169,11 @@
 
         // 3. REAL-TIME DATABASE ENGINE
         function loadTransactions(uid) {
-            // Ask Firestore for the user's transactions, sorted newest to oldest
+            // Ask Firestore for the user's trades, sorted newest to oldest
             const q = query(
-                collection(db, "transactions"), 
+                collection(db, "trades"), 
                 where("userId", "==", uid),
-                orderBy("timestamp", "desc")
+                orderBy("date", "desc")
             );
 
             onSnapshot(q, (snapshot) => {
@@ -181,10 +196,13 @@
                         const txn = doc.data();
                         tradeCount++;
 
-                        // Aggregate Tax & Fee Data (assuming your DB has these fields)
+                        // Aggregate Tax & Fee Data (assuming your DB has these fields, defaulting to 0)
                         if (txn.fee) totalFees += txn.fee;
                         if (txn.realizedGain > 0) totalGains += txn.realizedGain;
                         if (txn.realizedGain < 0) totalLosses += Math.abs(txn.realizedGain);
+
+                        // Calculate total amount for the row
+                        const totalAmount = (txn.qty || 1) * (txn.price || 0);
 
                         // Determine Badge Styling
                         let typeStyle = "bg-slate-100 text-slate-600";
@@ -192,20 +210,16 @@
                         if (txn.type === 'Sell') typeStyle = "bg-purple-100 text-purple-700";
                         if (txn.type === 'Deposit') typeStyle = "bg-green-100 text-green-700";
 
-                        // Format the Date
-                        const dateObj = new Date(txn.timestamp);
-                        const formattedDate = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
                         // Inject the Row
                         const tr = document.createElement('tr');
                         tr.className = "hover:bg-slate-50 transition";
                         tr.innerHTML = `
-                            <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${formattedDate}</td>
+                            <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${txn.date}</td>
                             <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${typeStyle}">${txn.type}</span></td>
-                            <td class="px-6 py-4 font-bold text-slate-900">${txn.asset}</td>
+                            <td class="px-6 py-4 font-bold text-slate-900">${txn.ticker || txn.asset}</td>
                             <td class="px-6 py-4 text-right">${txn.qty || 1}</td>
                             <td class="px-6 py-4 text-right">$${(txn.price || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                            <td class="px-6 py-4 text-right font-medium text-slate-900">$${(txn.total || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                            <td class="px-6 py-4 text-right font-medium text-slate-900">$${totalAmount.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -215,11 +229,11 @@
                 document.getElementById('displayGains').innerText = "+$" + totalGains.toLocaleString(undefined, {minimumFractionDigits: 2});
                 document.getElementById('displayLosses').innerText = "-$" + totalLosses.toLocaleString(undefined, {minimumFractionDigits: 2});
                 document.getElementById('displayFees').innerText = "$" + totalFees.toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('displayTradeCount').innerText = `Across ${tradeCount} executed trades`;
+                document.getElementById('displayTradeCount').innerText = `Across ${tradeCount} logged trades`;
             });
         }
 
-        // 4. CHART.JS: PERFORMANCE BENCHMARKING (UI Mocked until daily cron jobs)
+        // 4. CHART.JS: PERFORMANCE BENCHMARKING (UI Mockup)
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('performanceChart').getContext('2d');
             const labels = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'];
