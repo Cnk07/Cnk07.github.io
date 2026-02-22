@@ -32,89 +32,180 @@
             <a href="articles.html" class="text-turkuaz">Articles</a>
         </div>
     </nav>
-
-    <section class="py-16 bg-white border-b text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Technical <span class="text-turkuaz">Insights</span></h1>
-        <p class="text-gray-500 max-w-2xl mx-auto text-lg">
-            Deep dives into financial technology, system security, and the engineering behind modern portfolio management.
-        </p>
-    </section>
-
-    <main class="max-w-7xl mx-auto py-16 px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+<main class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-6 text-center">Engineering & Tech Insights</h1>
             
-            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden article-card flex flex-col cursor-pointer">
-                <div class="h-48 overflow-hidden bg-gray-200">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" alt="Code Data" class="w-full h-full object-cover">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                
+                <div class="relative w-full md:w-96">
+                    <input type="text" id="searchInput" placeholder="Search articles..." 
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
                 </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="text-xs font-bold text-turkuaz uppercase tracking-wider mb-2">Algorithm Engineering</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">Optimizing Transaction Processing with Priority Queues</h3>
-                    <p class="text-gray-600 text-sm mb-6 line-clamp-3 flex-1">
-                        A technical breakdown of how utilizing advanced Java data structures, specifically priority queues and binary search trees, can reduce latency in high-frequency financial ledgers.
-                    </p>
-                    <div class="flex items-center text-turkuaz font-semibold text-sm hover:text-teal-700 transition">
-                        Read Full Technical Paper <span class="ml-2">→</span>
-                    </div>
-                </div>
-            </article>
 
-            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden article-card flex flex-col cursor-pointer">
-                <div class="h-48 overflow-hidden bg-gray-900 flex items-center justify-center">
-                    <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=800&auto=format&fit=crop" alt="Cybersecurity" class="w-full h-full object-cover opacity-80 mix-blend-overlay">
+                <div class="flex flex-wrap justify-center gap-2" id="categoryFilters">
+                    <button class="filter-btn active bg-turkuaz text-white px-5 py-2 rounded-full text-sm font-medium shadow-md shadow-teal-500/20 transition" data-category="All">All</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 px-5 py-2 rounded-full text-sm font-medium transition" data-category="Cybersecurity">Cybersecurity</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 px-5 py-2 rounded-full text-sm font-medium transition" data-category="Aerospace">Aerospace</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 px-5 py-2 rounded-full text-sm font-medium transition" data-category="Software Dev">Software Dev</button>
                 </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="text-xs font-bold text-turkuaz uppercase tracking-wider mb-2">Cybersecurity</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">Applying OSINT Methodologies to Threat Intelligence</h3>
-                    <p class="text-gray-600 text-sm mb-6 line-clamp-3 flex-1">
-                        Exploring how open-source intelligence gathering and network analysis can pre-emptively identify vulnerabilities in decentralized financial systems.
-                    </p>
-                    <div class="flex items-center text-turkuaz font-semibold text-sm hover:text-teal-700 transition">
-                        Read Full Technical Paper <span class="ml-2">→</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden article-card flex flex-col cursor-pointer">
-                <div class="h-48 overflow-hidden bg-gray-200">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop" alt="Finance Dashboard" class="w-full h-full object-cover">
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="text-xs font-bold text-turkuaz uppercase tracking-wider mb-2">Product Development</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">The Architecture of a Scalable SaaS Dashboard</h3>
-                    <p class="text-gray-600 text-sm mb-6 line-clamp-3 flex-1">
-                        Designing UI components that handle massive datasets seamlessly. From stateless architecture to rendering heavy visual data without compromising browser performance.
-                    </p>
-                    <div class="flex items-center text-turkuaz font-semibold text-sm hover:text-teal-700 transition">
-                        Read Full Technical Paper <span class="ml-2">→</span>
-                    </div>
-                </div>
-            </article>
-
+            </div>
         </div>
 
-        <div class="flex justify-center mt-12 space-x-2">
-            <span class="w-10 h-10 flex items-center justify-center bg-turkuaz text-white font-bold rounded-lg cursor-pointer shadow-sm">1</span>
-            <span class="w-10 h-10 flex items-center justify-center bg-white text-gray-600 font-medium rounded-lg hover:bg-gray-100 cursor-pointer border border-gray-200">2</span>
-            <span class="w-10 h-10 flex items-center justify-center bg-white text-gray-600 font-medium rounded-lg hover:bg-gray-100 cursor-pointer border border-gray-200">3</span>
-            <span class="w-10 h-10 flex items-center justify-center bg-white text-gray-600 font-medium rounded-lg hover:bg-gray-100 cursor-pointer border border-gray-200">→</span>
-        </div>
-    </main>
+        <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
 
-    <section class="bg-gray-900 py-16 px-8">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-2xl font-bold text-white mb-4">Subscribe to our Engineering Blog</h2>
-            <p class="text-gray-400 mb-8">Get the latest insights on algorithm optimization, security protocols, and platform updates delivered to your inbox.</p>
-            <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
-                <input type="email" placeholder="Enter your email address" class="px-4 py-3 rounded-lg flex-1 focus:outline-none focus:ring-2 focus:ring-turkuaz border-none">
-                <button type="button" class="bg-turkuaz text-white font-bold px-6 py-3 rounded-lg hover:opacity-90 transition">Subscribe</button>
-            </form>
+        <div id="noResults" class="hidden text-center py-12">
+            <p class="text-xl text-gray-500">No articles found matching your criteria.</p>
+            <button id="clearFiltersBtn" class="mt-4 text-turkuaz font-medium hover:underline">Clear all filters</button>
         </div>
-    </section>
 
+    </div>
+</main>
     <footer class="bg-white py-8 border-t text-center text-gray-400 text-sm">
         © 2026 Paydas Portfolio | All Rights Reserved.
     </footer>
 
+
+    <script>
+    // 1. Our "Database" of Articles
+    const articlesData = [
+        {
+            id: 1,
+            title: "Analyzing Payload and Parachute Dynamics",
+            category: "Aerospace",
+            date: "Feb 18, 2026",
+            readTime: "8 min read",
+            excerpt: "A breakdown of structural choices using fiberglass vs. carbon fiber, and calculating descent rates using Ogive nose cone parameters.",
+            imageUrl: "https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&q=80&w=800",
+            link: "#"
+        },
+        {
+            id: 2,
+            title: "Common Exploits in Capture The Flag Competitions",
+            category: "Cybersecurity",
+            date: "Jan 26, 2026",
+            readTime: "12 min read",
+            excerpt: "Examining standard methodologies and essential toolkits required for quickly analyzing and overcoming modern CTF challenge architectures.",
+            imageUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
+            link: "#"
+        },
+        {
+            id: 3,
+            title: "Optimizing Priority Queues and Heaps",
+            category: "Software Dev",
+            date: "Jan 15, 2026",
+            readTime: "6 min read",
+            excerpt: "Deep dive into advanced data structures. How manipulating Binary Search Trees and Hash Tables improves backend algorithmic efficiency.",
+            imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800",
+            link: "#"
+        },
+        {
+            id: 4,
+            title: "Implementing Verilog for Digital Design",
+            category: "Software Dev",
+            date: "Dec 10, 2025",
+            readTime: "10 min read",
+            excerpt: "Structuring robust testbenches and handling XDC constraint files when programming state machines on FPGA hardware.",
+            imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+            link: "#"
+        }
+    ];
+
+    // 2. HTML Elements
+    const grid = document.getElementById('articlesGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const noResults = document.getElementById('noResults');
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+    let currentCategory = 'All';
+    let currentSearchTerm = '';
+
+    // 3. Render Function
+    function renderArticles() {
+        grid.innerHTML = ''; // Clear grid
+        
+        // Filter logic
+        const filteredArticles = articlesData.filter(article => {
+            const matchesCategory = currentCategory === 'All' || article.category === currentCategory;
+            const matchesSearch = article.title.toLowerCase().includes(currentSearchTerm.toLowerCase()) || 
+                                  article.excerpt.toLowerCase().includes(currentSearchTerm.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+
+        // Show/Hide "No Results" message
+        if (filteredArticles.length === 0) {
+            noResults.classList.remove('hidden');
+        } else {
+            noResults.classList.add('hidden');
+            
+            // Generate HTML for each card
+            filteredArticles.forEach(article => {
+                const cardHTML = `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition duration-300 flex flex-col h-full group">
+                        <div class="relative overflow-hidden h-48">
+                            <img src="${article.imageUrl}" alt="${article.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-turkuaz">
+                                ${article.category}
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center text-xs text-gray-400 mb-3 space-x-3">
+                                <span><i class="far fa-calendar-alt mr-1"></i>${article.date}</span>
+                                <span>•</span>
+                                <span><i class="far fa-clock mr-1"></i>${article.readTime}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-turkuaz transition line-clamp-2">${article.title}</h3>
+                            <p class="text-gray-600 mb-4 text-sm line-clamp-3 flex-grow">${article.excerpt}</p>
+                            <a href="${article.link}" class="inline-flex items-center text-turkuaz font-semibold text-sm hover:text-teal-700 transition mt-auto">
+                                Read Article
+                                <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+    }
+
+    // 4. Event Listeners
+    searchInput.addEventListener('input', (e) => {
+        currentSearchTerm = e.target.value;
+        renderArticles();
+    });
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // Update active styling
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-turkuaz', 'text-white', 'shadow-md', 'active');
+                b.classList.add('bg-white', 'text-gray-600');
+            });
+            e.target.classList.remove('bg-white', 'text-gray-600');
+            e.target.classList.add('bg-turkuaz', 'text-white', 'shadow-md', 'active');
+
+            // Update category and re-render
+            currentCategory = e.target.getAttribute('data-category');
+            renderArticles();
+        });
+    });
+
+    clearFiltersBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentSearchTerm = '';
+        document.querySelector('[data-category="All"]').click();
+    });
+
+    // 5. Initial Render on Page Load
+    renderArticles();
+
+</script>
 </body>
 </html>
