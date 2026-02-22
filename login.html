@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.google.com/recaptcha/api.js?render=6Ld_YOUR_ACTUAL_SITE_KEY"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld_6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - Paydas Portfolio</title>
@@ -108,36 +108,55 @@
         // --- LOGIN LOGIC ---
     // Inside login.html <script>
 let loginAttempts = 0;
-
+const MAX_ATTEMPTS = 5;
 async function signInUser(email, password) {
     if (loginAttempts >= 5) {
         alert("Security Lock: Too many attempts. Please wait.");
         return; 
     }
     
-    // ... rest of your firebase login code ...
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            errorMessageEl.classList.add('hidden');
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const submitButton = loginForm.querySelector('button[type="submit"]');
+    // 1. Check if user is locked out
+    if (loginAttempts >= MAX_ATTEMPTS) {
+        alert("Security Lock: Too many failed attempts. Please try again later."); [cite: 2026-02-21]
+        return;
+    }
 
-            submitButton.innerText = "Authenticating...";
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    window.location.href = "dashboard.html"; 
-                })
-                .catch((error) => {
-                    errorMessageEl.classList.remove('text-turkuaz');
-                    errorMessageEl.classList.add('text-red-600');
-                    errorMessageEl.innerText = "Invalid email or password. Please try again.";
-                    errorMessageEl.classList.remove('hidden');
-                    submitButton.innerText = "Access Workspace"; 
-                });
+    // 2. Trigger reCAPTCHA v3
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6Ld_YOUR_ACTUAL_SITE_KEY', {action: 'login'}).then(async (token) => { [cite: 2026-02-21]
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Log success to Firebase for your audit trail
+                await logSecurityEvent(userCredential.user.uid, "Successful Login"); [cite: 2026-02-21]
+                
+                loginAttempts = 0; // Reset counter on success
+                window.location.href = "dashboard.html";
+            } catch (error) {
+                loginAttempts++; // Increment failures
+                await logSecurityEvent("UNKNOWN", `Failed Login: ${error.code}`); [cite: 2026-02-21]
+                alert("Invalid email or password.");
+            }
         });
+    });
+});
+
+// 4. Add this helper function at the very bottom of your script
+async function logSecurityEvent(uid, action) {
+    await addDoc(collection(db, "security_logs"), {
+        userId: uid,
+        action: action,
+        timestamp: new Date().toISOString(),
+        device: navigator.platform,
+        browser: navigator.userAgent
+    }); [cite: 2026-02-21]
+}
 
         // --- FORGOT PASSWORD LOGIC ---
         const forgotPasswordLink = document.getElementById('forgot-password');
