@@ -11,6 +11,9 @@
         body { font-family: 'Inter', sans-serif; }
         .text-turkuaz { color: #0d9488; }
         .bg-turkuaz { background-color: #0d9488; }
+        /* Custom scrollbar for the search dropdown */
+        #tickerDropdown::-webkit-scrollbar { width: 6px; }
+        #tickerDropdown::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-slate-50 flex h-screen overflow-hidden hidden" id="secure-body">
@@ -56,12 +59,11 @@
             </div>
             <div class="flex items-center space-x-4">
                 <span class="text-sm font-medium text-slate-500">US Market:</span>
-                <span id="marketStatus" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500">Checking...</span>
+                <span id="marketStatus" title="Fetching market times..." class="cursor-help px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200 border-dashed">Checking...</span>
             </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
-            
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 xl:col-span-1 h-fit">
@@ -75,28 +77,14 @@
                                     <option value="Sell">Sell</option>
                                 </select>
                             </div>
-                            <div>
+                            
+                            <div class="relative">
                                 <label class="block text-sm font-medium text-slate-700">Asset / Ticker</label>
-                                <select id="tradeTicker" required class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none">
-                                    <optgroup label="Tech Stocks">
-                                        <option value="AAPL">Apple (AAPL)</option>
-                                        <option value="MSFT">Microsoft (MSFT)</option>
-                                        <option value="NVDA">NVIDIA (NVDA)</option>
-                                        <option value="TSLA">Tesla (TSLA)</option>
-                                        <option value="AMZN">Amazon (AMZN)</option>
-                                    </optgroup>
-                                    <optgroup label="Indices & ETFs">
-                                        <option value="SPY">S&P 500 (SPY)</option>
-                                        <option value="QQQ">Nasdaq 100 (QQQ)</option>
-                                        <option value="VOO">Vanguard 500 (VOO)</option>
-                                    </optgroup>
-                                    <optgroup label="Crypto (Proxies)">
-                                        <option value="COIN">Coinbase (COIN)</option>
-                                        <option value="MSTR">MicroStrategy (MSTR)</option>
-                                    </optgroup>
-                                </select>
+                                <input type="text" id="tradeTicker" autocomplete="off" required placeholder="e.g. AAPL" class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none uppercase transition">
+                                <ul id="tickerDropdown" class="absolute z-50 w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 hidden max-h-48 overflow-y-auto"></ul>
                             </div>
                         </div>
+                        
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Quantity</label>
@@ -108,7 +96,7 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700">Date (Cannot be in the future)</label>
+                            <label class="block text-sm font-medium text-slate-700">Date</label>
                             <input type="date" id="tradeDate" required class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none">
                         </div>
                         <button type="submit" id="submitTradeBtn" class="w-full bg-turkuaz text-white font-bold py-2.5 rounded-lg hover:bg-teal-700 transition">Log Trade</button>
@@ -117,9 +105,9 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 xl:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-slate-900">ROI vs Benchmarks</h3>
+                        <h3 class="text-lg font-bold text-slate-900">Historical Trend (30 Days)</h3>
                         <div class="flex space-x-2">
-                            <select id="benchmarkSelect" class="text-sm border border-slate-300 rounded-lg px-2 py-1 outline-none">
+                            <select id="benchmarkSelect" class="text-sm border border-slate-300 rounded-lg px-2 py-1 outline-none font-medium">
                                 <option value="SPY">S&P 500 (SPY)</option>
                                 <option value="QQQ">Nasdaq 100 (QQQ)</option>
                             </select>
@@ -162,8 +150,7 @@
         import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ⚠️ API KEYS ⚠️
-        const FINNHUB_API_KEY = "d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0"; // Get from finnhub.io
-        
+        const FINNHUB_API_KEY = "d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0";
         const firebaseConfig = {
             apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
             authDomain: "paydas-potrfolio.firebaseapp.com",
@@ -172,6 +159,7 @@
             messagingSenderId: "1064349640309",
             appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
         };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -182,17 +170,18 @@
         // --- PREVENT FUTURE DATES ---
         const dateInput = document.getElementById('tradeDate');
         const today = new Date().toISOString().split('T')[0];
-        dateInput.max = today; // Blocks future dates
-        dateInput.value = today; // Defaults to today
+        dateInput.max = today; 
+        dateInput.value = today; 
 
         // --- AUTH GUARD ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('secure-body').classList.remove('hidden');
                 currentUserUID = user.uid;
+                
                 checkMarketStatus();
-                loadAndCalculateHoldings(currentUserUID);
                 initChart();
+                loadAndCalculateHoldings(currentUserUID);
             } else {
                 window.location.replace("login.html");
             }
@@ -200,25 +189,119 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "login.html"); });
 
-        // --- API: MARKET STATUS ---
+        // --- ISSUE 1: DYNAMIC TICKER SEARCH ---
+        const tickerInput = document.getElementById('tradeTicker');
+        const tickerDropdown = document.getElementById('tickerDropdown');
+        let searchTimeout;
+
+        tickerInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const queryVal = e.target.value.trim().toUpperCase();
+            
+            if (queryVal.length < 1) {
+                tickerDropdown.classList.add('hidden');
+                return;
+            }
+
+            tickerDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-xs text-center animate-pulse">Searching market...</li>';
+            tickerDropdown.classList.remove('hidden');
+
+            // Wait 500ms after user stops typing to save API calls
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${FINNHUB_API_KEY}`);
+                    const data = await res.json();
+                    
+                    tickerDropdown.innerHTML = '';
+                    
+                    if (data.count > 0) {
+                        // Filter out obscure symbols with dots, limit to top 8
+                        const cleanResults = data.result.filter(r => !r.displaySymbol.includes('.')).slice(0, 8);
+                        
+                        if(cleanResults.length === 0) {
+                             tickerDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-sm">No standard stocks found.</li>';
+                             return;
+                        }
+
+                        cleanResults.forEach(item => {
+                            const li = document.createElement('li');
+                            li.className = "px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-0 transition";
+                            li.innerHTML = `<span class="font-bold text-slate-900">${item.displaySymbol}</span> <span class="text-slate-500 text-xs ml-2 truncate block sm:inline">${item.description}</span>`;
+                            li.onclick = () => {
+                                tickerInput.value = item.displaySymbol;
+                                tickerDropdown.classList.add('hidden');
+                            };
+                            tickerDropdown.appendChild(li);
+                        });
+                    } else {
+                         tickerDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-sm text-center">No results found</li>';
+                    }
+                } catch(e) { 
+                    tickerDropdown.innerHTML = '<li class="px-4 py-2 text-red-500 text-sm">Search error. Type manually.</li>';
+                }
+            }, 500);
+        });
+
+        // Hide dropdown if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!tickerInput.contains(e.target) && !tickerDropdown.contains(e.target)) {
+                tickerDropdown.classList.add('hidden');
+            }
+        });
+
+        // --- ISSUE 3: MARKET STATUS & TOOLTIP MATH ---
+        function getNextMarketOpenString() {
+            let now = new Date();
+            // Get current time in EST/EDT
+            let estTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+            let day = estTime.getDay(); // 0 = Sun, 6 = Sat
+            let hour = estTime.getHours();
+            let min = estTime.getMinutes();
+            
+            let target = new Date(estTime);
+            target.setHours(9, 30, 0, 0); // Target is 9:30 AM EST
+
+            if (day === 6) { target.setDate(target.getDate() + 2); } // Saturday -> Monday
+            else if (day === 0) { target.setDate(target.getDate() + 1); } // Sunday -> Monday
+            else if (hour >= 16) {
+                // Mon-Fri after 4PM
+                if (day === 5) target.setDate(target.getDate() + 3); // Friday -> Monday
+                else target.setDate(target.getDate() + 1); // Mon-Thu -> Next day
+            } else if (hour < 9 || (hour === 9 && min < 30)) {
+                // Mon-Fri before 9:30 AM -> Opens today
+            } else {
+                return "Market is OPEN right now";
+            }
+
+            let diffMs = target - estTime;
+            let diffHrs = Math.floor(diffMs / 3600000);
+            let diffMins = Math.floor((diffMs % 3600000) / 60000);
+            return `Opens in ${diffHrs} hours and ${diffMins} minutes.`;
+        }
+
         async function checkMarketStatus() {
             const badge = document.getElementById('marketStatus');
             try {
-                if (FINNHUB_API_KEY === "YOUR_FINNHUB_API_KEY") throw new Error("Missing Key");
                 const response = await fetch(`https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${FINNHUB_API_KEY}`);
                 const data = await response.json();
                 
                 if (data.isOpen) {
                     badge.innerText = "OPEN";
-                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700";
+                    badge.className = "cursor-help px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200 border-dashed";
+                    badge.title = "Market is currently trading.";
                 } else {
                     badge.innerText = "CLOSED";
-                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700";
+                    badge.className = "cursor-help px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 border-dashed";
+                    badge.title = getNextMarketOpenString(); // Shows time remaining on hover!
                 }
             } catch (e) {
-                badge.innerText = "API UNAVAILABLE";
-                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-600";
+                badge.innerText = "API ERROR";
             }
+            
+            // Re-calculate the tooltip every minute
+            setInterval(() => {
+                if(badge.innerText === "CLOSED") badge.title = getNextMarketOpenString();
+            }, 60000);
         }
 
         // --- FIREBASE: LOG TRADE ---
@@ -231,14 +314,13 @@
                 await addDoc(collection(db, "trades"), {
                     userId: currentUserUID,
                     type: document.getElementById('tradeType').value,
-                    ticker: document.getElementById('tradeTicker').value,
+                    ticker: document.getElementById('tradeTicker').value.toUpperCase(),
                     qty: parseFloat(document.getElementById('tradeQty').value),
                     price: parseFloat(document.getElementById('tradePrice').value),
                     date: document.getElementById('tradeDate').value,
                     timestamp: new Date().toISOString()
                 });
                 
-                // Reset form but keep today's date
                 document.getElementById('tradeForm').reset();
                 dateInput.value = today;
 
@@ -249,7 +331,7 @@
             }
         });
 
-        // --- CORE LOGIC: CALCULATE HOLDINGS & BULLETPROOF FETCH ---
+        // --- ISSUE 4: FAIL-SAFE HOLDINGS TABLE ---
         function loadAndCalculateHoldings(uid) {
             const q = query(collection(db, "trades"), where("userId", "==", uid), orderBy("date", "asc"));
 
@@ -275,61 +357,54 @@
                 const activeTickers = Object.keys(holdingsMap).filter(t => holdingsMap[t].qty > 0.0001);
                 
                 if (activeTickers.length === 0) {
-                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">No active holdings. Log a trade above.</td></tr>';
+                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">No active holdings found in your database. Log a trade above.</td></tr>';
                     return;
                 }
 
-                document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-turkuaz font-bold animate-pulse">Syncing Pricing Data...</td></tr>';
-                
-                const livePrices = {};
-                const apiErrors = {};
+                // FAIL-SAFE: Draw the table IMMEDIATELY using Average Costs, so it doesn't get stuck loading!
+                renderHoldingsTable(activeTickers, holdingsMap, {}, true);
 
+                // Now go fetch the live data in the background
+                const livePrices = {};
                 for (const ticker of activeTickers) {
                     try {
-                        if (FINNHUB_API_KEY === "YOUR_FINNHUB_API_KEY") throw new Error("Missing Key");
-                        
                         const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_API_KEY}`);
                         const data = await res.json();
-                        
-                        // FALLBACK FIX: Use 'c' (current). If 0 or missing, use 'pc' (previous close).
-                        const validPrice = data.c || data.pc || 0;
-                        
-                        if (validPrice > 0) {
-                            livePrices[ticker] = validPrice;
-                        } else {
-                            throw new Error("API returned 0");
-                        }
+                        // Get current price, or previous close if market closed
+                        livePrices[ticker] = data.c || data.pc || (holdingsMap[ticker].totalCost / holdingsMap[ticker].qty);
                     } catch (e) {
-                        // CRITICAL SAFETY NET: If API fails/market closed/no key, use their Average Cost so the table still loads!
-                        console.warn(`API fallback triggered for ${ticker}`);
+                        console.error("API Fetch failed for", ticker);
+                        // If API completely fails, fall back to average cost
                         livePrices[ticker] = holdingsMap[ticker].totalCost / holdingsMap[ticker].qty;
-                        apiErrors[ticker] = true; // Flags it for the UI
                     }
                 }
 
-                renderHoldingsTable(activeTickers, holdingsMap, livePrices, apiErrors);
+                // Re-draw table with live data
+                renderHoldingsTable(activeTickers, holdingsMap, livePrices, false);
             });
         }
 
         // --- UI: RENDER TABLE ---
-        function renderHoldingsTable(tickers, holdingsMap, livePrices, apiErrors) {
+        function renderHoldingsTable(tickers, holdingsMap, livePrices, isLoading) {
             const tbody = document.getElementById('holdingsTableBody');
             tbody.innerHTML = '';
 
             tickers.forEach(ticker => {
                 const data = holdingsMap[ticker];
                 const avgCost = data.totalCost / data.qty;
-                const livePrice = livePrices[ticker];
+                
+                // If isLoading is true, we just show their avgCost as the live price temporarily
+                const livePrice = isLoading ? avgCost : (livePrices[ticker] || avgCost);
                 
                 const totalValue = data.qty * livePrice;
                 const unrealizedPnl = totalValue - data.totalCost;
-                const unrealizedPct = (unrealizedPnl / data.totalCost) * 100;
+                const unrealizedPct = data.totalCost > 0 ? (unrealizedPnl / data.totalCost) * 100 : 0;
 
                 const pnlClass = unrealizedPnl >= 0 ? "text-green-600" : "text-red-500";
                 const pnlSign = unrealizedPnl >= 0 ? "+" : "";
-                
-                // Show a tiny warning icon if we had to fallback to Average Cost because the API failed
-                const priceWarning = apiErrors[ticker] ? `<span title="API Unavailable. Showing Avg Cost." class="text-xs text-orange-400 ml-1">⚠️</span>` : '';
+
+                // Add a small spinner icon while background fetch happens
+                const loadingBadge = isLoading ? '<span class="ml-2 inline-block animate-spin text-turkuaz text-xs">↻</span>' : '';
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
@@ -337,7 +412,7 @@
                     <td class="px-6 py-4 font-bold text-slate-900">${ticker}</td>
                     <td class="px-6 py-4 text-right">${data.qty.toLocaleString(undefined, {maximumFractionDigits: 4})}</td>
                     <td class="px-6 py-4 text-right">$${avgCost.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                    <td class="px-6 py-4 text-right font-medium text-slate-900">$${livePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ${priceWarning}</td>
+                    <td class="px-6 py-4 text-right font-medium text-slate-900">$${livePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ${loadingBadge}</td>
                     <td class="px-6 py-4 text-right font-medium text-slate-900">$${totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                     <td class="px-6 py-4 text-right font-bold ${pnlClass}">
                         ${pnlSign}$${unrealizedPnl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} 
@@ -348,20 +423,61 @@
             });
         }
 
-        // --- CHART.JS ---
+        // --- ISSUE 2: REAL GRAPH DATA ---
         function initChart() {
             const ctx = document.getElementById('roiChart').getContext('2d');
             chartInstance = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q1 (Current)'],
-                    datasets: [
-                        { label: 'Your Portfolio ROI %', data: [2, 5, 4, 12, 18], borderColor: '#0d9488', borderWidth: 3, tension: 0.4 },
-                        { label: 'Benchmark ROI %', data: [3, 4, 6, 9, 11], borderColor: '#94a3b8', borderWidth: 2, borderDash: [5, 5], tension: 0.4 }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+                data: { labels: [], datasets: [] }, // Will be populated by fetch
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { position: 'top' } },
+                    scales: { x: { display: false } } // Hide dense dates on X axis
+                }
             });
+            
+            // Load initial default data (SPY)
+            fetchChartData("SPY");
+            
+            // Listen to dropdown changes to update chart!
+            document.getElementById('benchmarkSelect').addEventListener('change', (e) => {
+                fetchChartData(e.target.value);
+            });
+        }
+
+        async function fetchChartData(symbol) {
+            // Get last 30 days of timestamps for Finnhub API
+            const toDate = Math.floor(Date.now() / 1000);
+            const fromDate = toDate - (30 * 24 * 60 * 60); 
+
+            try {
+                // Resolution 'D' = Daily candles
+                const res = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fromDate}&to=${toDate}&token=${FINNHUB_API_KEY}`);
+                const data = await res.json();
+
+                if (data.s === "ok") {
+                    // Generate mock labels (just numbers for the days)
+                    const labels = data.c.map((_, index) => `Day ${index + 1}`);
+                    
+                    chartInstance.data.labels = labels;
+                    chartInstance.data.datasets = [
+                        { 
+                            label: `${symbol} Price Trend (Last 30 Days)`, 
+                            data: data.c, // 'c' is the array of Close Prices
+                            borderColor: '#0d9488', 
+                            backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                            borderWidth: 3, 
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 0 // Hide dots for clean line
+                        }
+                    ];
+                    chartInstance.update();
+                }
+            } catch (e) {
+                console.error("Chart data fetch failed", e);
+            }
         }
     </script>
 </body>
