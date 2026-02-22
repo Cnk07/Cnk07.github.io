@@ -15,28 +15,26 @@
 </head>
 <body class="bg-slate-50 flex h-screen overflow-hidden hidden" id="secure-body">
 
-    <aside class="w-64 bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 hidden md:flex">
+    <aside class="w-64 bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 shrink-0 hidden md:flex">
         <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
             <div class="h-8 w-8 bg-turkuaz rounded flex items-center justify-center font-bold text-lg">P</div>
             <span class="text-xl font-bold tracking-tight">PAYDAS</span>
         </div>
 
         <nav class="flex-grow p-4 space-y-2">
-    <a href="dashboard.html" class="flex items-center space-x-3 bg-slate-800 text-turkuaz px-4 py-3 rounded-lg font-medium transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-        <span>Portfolio Summary</span>
-    </a>
-    
-    <a href="tracker.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-        <span>Portfolio Tracker</span>
-    </a>
-
-    <a href="reports.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-        <span>Reports & Analytics</span>
-    </a>
-</nav>
+            <a href="dashboard.html" class="flex items-center space-x-3 bg-slate-800 text-turkuaz px-4 py-3 rounded-lg font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span>Portfolio Summary</span>
+            </a>
+            <a href="tracker.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                <span>Portfolio Tracker</span>
+            </a>
+            <a href="reports.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Reports & Analytics</span>
+            </a>
+        </nav>
 
         <div class="p-4 border-t border-slate-800">
             <button id="logoutBtn" class="flex items-center space-x-2 w-full text-slate-400 hover:text-white px-4 py-3 rounded-lg transition">
@@ -53,7 +51,7 @@
                 <h1 class="text-2xl font-bold text-slate-900">Dashboard</h1>
                 <p class="text-sm text-slate-500 mt-1">Welcome back, <span id="user-display" class="font-medium text-turkuaz">Loading...</span></p>
             </div>
-<button id="openModalBtn" class="bg-turkuaz text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition shadow-md text-sm">
+            <button id="openModalBtn" class="bg-turkuaz text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition shadow-md text-sm">
                 + New Asset
             </button>
         </header>
@@ -65,15 +63,10 @@
                     <p class="text-sm font-medium text-slate-500 mb-1">Total Net Worth</p>
                     <h3 id="totalNetWorth" class="text-3xl font-bold text-slate-900">$0.00</h3>
                 </div>
-                
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-sm font-medium text-slate-500 mb-1">Daily Profit/Loss</p>
-                    <div class="flex items-baseline space-x-2">
-                        <h3 class="text-3xl font-bold text-slate-400">N/A</h3>
-                        <span class="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Requires History</span>
-                    </div>
+                    <p class="text-sm font-medium text-slate-500 mb-1">Total Assets</p>
+                    <h3 id="assetCount" class="text-3xl font-bold text-slate-900">0</h3>
                 </div>
-
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-sm font-medium text-slate-500 mb-1">Available Cash</p>
                     <h3 id="availableCash" class="text-3xl font-bold text-slate-900">$0.00</h3>
@@ -91,7 +84,7 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 lg:col-span-2 overflow-hidden flex flex-col">
                     <div class="px-6 py-5 border-b border-slate-200">
-                        <h3 class="text-lg font-bold text-slate-900">Open Positions</h3>
+                        <h3 class="text-lg font-bold text-slate-900">Combined Open Positions</h3>
                     </div>
                     <div class="overflow-x-auto flex-1">
                         <table class="w-full text-left border-collapse">
@@ -101,13 +94,13 @@
                                     <th class="px-6 py-3 font-medium">Category</th>
                                     <th class="px-6 py-3 font-medium text-right">Qty</th>
                                     <th class="px-6 py-3 font-medium text-right">Total Value</th>
-                                    <th class="px-6 py-3 font-medium text-right">ROI</th>
+                                    <th class="px-6 py-3 font-medium text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="positionsTableBody" class="divide-y divide-slate-100 text-sm">
-                                </tbody>
+                                <tr><td colspan="5" class="text-center py-8 text-turkuaz font-bold animate-pulse">Syncing Portfolio Data...</td></tr>
+                            </tbody>
                         </table>
-                        <p id="noDataMsg" class="text-center py-8 text-slate-500 hidden">No assets found. Add a new asset to build your portfolio.</p>
                     </div>
                 </div>
             </div>
@@ -115,25 +108,27 @@
 
         <div id="addAssetModal" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
             <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200">
-                <h2 class="text-2xl font-bold mb-6 text-slate-900">Add New Trade / Asset</h2>
+                <h2 class="text-2xl font-bold mb-2 text-slate-900">Add Manual Asset</h2>
+                <p class="text-xs text-slate-500 mb-6">Note: To add stocks/crypto, use the Portfolio Tracker.</p>
                 <form id="addAssetForm" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">Asset Name (e.g. Apple Inc, W176)</label>
-                        <input type="text" id="assetName" required class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz focus:border-turkuaz outline-none">
+                        <label class="block text-sm font-medium text-slate-700">Asset Name (e.g. W176 AMG)</label>
+                        <input type="text" id="assetName" required class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">Category</label>
-                        <select id="assetCategory" class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz focus:border-turkuaz outline-none">
-                            <option value="Stocks">Stocks / Mutual Funds</option>
-                            <option value="Cash">Cash / Bank</option>
+                        <label class="block text-sm font-medium text-slate-700">Expanded Category</label>
+                        <select id="assetCategory" class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg outline-none">
+                            <option value="Cash">Cash / Bank Account</option>
                             <option value="Vehicle">Vehicle</option>
-                            <option value="Commodities">Commodities</option>
-                            <option value="Crypto">Cryptocurrency</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Collectibles">Collectibles / Watches</option>
+                            <option value="Private Equity">Private Equity / Business</option>
+                            <option value="Other">Other Asset</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">Total Estimated Value ($)</label>
-                        <input type="number" id="assetValue" required min="0" step="0.01" class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz focus:border-turkuaz outline-none">
+                        <label class="block text-sm font-medium text-slate-700">Estimated Value ($)</label>
+                        <input type="number" id="assetValue" required min="0" step="0.01" class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg outline-none">
                     </div>
                     <div class="flex space-x-3 mt-8 pt-4">
                         <button type="button" id="closeModalBtn" class="flex-1 bg-slate-100 text-slate-700 py-2.5 rounded-lg font-bold hover:bg-slate-200 transition">Cancel</button>
@@ -145,12 +140,13 @@
     </main>
 
     <script type="module">
-        // 1. FIREBASE IMPORTS
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // IMPORT deleteDoc and doc for the remove functionality!
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 2. YOUR EXACT FIREBASE CONFIG
+        // ⚠️ API KEYS ⚠️
+        const FINNHUB_API_KEY = "YOUR_FINNHUB_API_KEY"; // Keep your Finnhub key here
         const firebaseConfig = {
             apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
             authDomain: "paydas-potrfolio.firebaseapp.com",
@@ -165,37 +161,36 @@
         const db = getFirestore(app);
 
         let currentUserUID = null;
-        let myChart = null; // Holds the Chart.js instance
+        let myChart = null;
 
-        // 3. AUTHENTICATION GUARD
+        // Shared State Objects
+        let globalManualAssets = [];
+        let globalTradeHoldings = {};
+
+        // 1. AUTH GUARD
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('secure-body').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.displayName || user.email;
                 currentUserUID = user.uid;
-                
-                // Fetch data once logged in
-                loadUserPortfolio(currentUserUID);
+                startDataSync(currentUserUID);
             } else {
                 window.location.replace("login.html");
             }
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            signOut(auth).then(() => window.location.href = "login.html");
-        });
+        document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "login.html"); });
 
-        // 4. MODAL UI LOGIC
+        // 2. MODAL LOGIC
         const modal = document.getElementById('addAssetModal');
         document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
 
-        // 5. WRITE DATA TO FIRESTORE
+        // 3. ADD MANUAL ASSET
         document.getElementById('addAssetForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const saveBtn = document.getElementById('saveAssetBtn');
             saveBtn.innerText = "Saving...";
-
             try {
                 await addDoc(collection(db, "assets"), {
                     userId: currentUserUID,
@@ -206,85 +201,142 @@
                 });
                 document.getElementById('addAssetForm').reset();
                 modal.classList.add('hidden');
-            } catch (error) {
-                alert("Database Error: " + error.message);
-            } finally {
-                saveBtn.innerText = "Save Asset";
-            }
+            } catch (error) { alert("Database Error: " + error.message); } 
+            finally { saveBtn.innerText = "Save Asset"; }
         });
 
-        // 6. READ DATA FROM FIRESTORE (REAL-TIME ENGINE)
-        function loadUserPortfolio(uid) {
-            const q = query(collection(db, "assets"), where("userId", "==", uid));
-
-            onSnapshot(q, (snapshot) => {
-                const tbody = document.getElementById('positionsTableBody');
-                const noDataMsg = document.getElementById('noDataMsg');
-                
-                tbody.innerHTML = ''; 
-                
-                let totalNetWorth = 0;
-                let availableCash = 0;
-                let categoryTotals = {}; // Prepares data for the Donut Chart
-
-                if (snapshot.empty) {
-                    noDataMsg.classList.remove('hidden');
-                    updateChart({}); // Empty chart
-                } else {
-                    noDataMsg.classList.add('hidden');
-                    
-                    snapshot.forEach((doc) => {
-                        const asset = doc.data();
-                        
-                        // Calculate Totals
-                        totalNetWorth += asset.value;
-                        if (asset.category === "Cash") {
-                            availableCash += asset.value;
-                        }
-
-                        // Aggregate data for the Chart
-                        if (categoryTotals[asset.category]) {
-                            categoryTotals[asset.category] += asset.value;
-                        } else {
-                            categoryTotals[asset.category] = asset.value;
-                        }
-                        
-                        // Inject Table Rows
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-slate-50 transition";
-                        tr.innerHTML = `
-                            <td class="px-6 py-4 font-medium text-slate-900">${asset.name}</td>
-                            <td class="px-6 py-4 text-slate-500">${asset.category}</td>
-                            <td class="px-6 py-4 text-right">1</td>
-                            <td class="px-6 py-4 text-right font-medium text-slate-900">$${asset.value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                            <td class="px-6 py-4 text-right text-slate-400 font-medium">N/A</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-
-                    updateChart(categoryTotals);
+        // 4. DELETE MANUAL ASSET LOGIC (Exposed to window so inline onclick works)
+        window.deleteManualAsset = async function(assetId) {
+            if(confirm("Are you sure you want to remove this asset?")) {
+                try {
+                    await deleteDoc(doc(db, "assets", assetId));
+                } catch (error) {
+                    alert("Error removing asset: " + error.message);
                 }
+            }
+        };
 
-                // Update the Top Cards
-                document.getElementById('totalNetWorth').innerText = "$" + totalNetWorth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                document.getElementById('availableCash').innerText = "$" + availableCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        // 5. DATA SYNC ENGINE (Listens to both collections)
+        function startDataSync(uid) {
+            // Listener 1: Manual Assets
+            onSnapshot(query(collection(db, "assets"), where("userId", "==", uid)), (snapshot) => {
+                globalManualAssets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderDashboard();
+            });
+
+            // Listener 2: Tracked Trades
+            onSnapshot(query(collection(db, "trades"), where("userId", "==", uid)), async (snapshot) => {
+                let holdingsMap = {};
+                snapshot.forEach((doc) => {
+                    const t = doc.data();
+                    if (!holdingsMap[t.ticker]) holdingsMap[t.ticker] = { qty: 0, cost: 0, category: 'Stocks/Crypto' };
+                    
+                    if (t.type === "Buy") {
+                        holdingsMap[t.ticker].qty += t.qty;
+                    } else if (t.type === "Sell" && holdingsMap[t.ticker].qty > 0) {
+                        holdingsMap[t.ticker].qty -= t.qty;
+                    }
+                });
+
+                // Filter out empty holdings
+                const activeHoldings = {};
+                for (let ticker in holdingsMap) {
+                    if (holdingsMap[ticker].qty > 0.0001) activeHoldings[ticker] = holdingsMap[ticker];
+                }
+                
+                globalTradeHoldings = activeHoldings;
+                await fetchLivePricesAndRender();
             });
         }
 
-        // 7. CHART.JS RENDER LOGIC
+        // 6. FETCH API & RENDER
+        async function fetchLivePricesAndRender() {
+            const activeTickers = Object.keys(globalTradeHoldings);
+            
+            // Fetch live prices from Finnhub for the trade holdings
+            for (const ticker of activeTickers) {
+                try {
+                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_API_KEY}`);
+                    const data = await res.json();
+                    globalTradeHoldings[ticker].livePrice = data.c || 0;
+                    globalTradeHoldings[ticker].totalValue = globalTradeHoldings[ticker].qty * data.c;
+                } catch (e) {
+                    globalTradeHoldings[ticker].livePrice = 0;
+                    globalTradeHoldings[ticker].totalValue = 0;
+                }
+            }
+            renderDashboard();
+        }
+
+        // 7. BUILD THE UI
+        function renderDashboard() {
+            const tbody = document.getElementById('positionsTableBody');
+            tbody.innerHTML = ''; 
+            
+            let totalNetWorth = 0;
+            let availableCash = 0;
+            let assetCount = 0;
+            let categoryTotals = {};
+
+            // --- PROCESS MANUAL ASSETS ---
+            globalManualAssets.forEach(asset => {
+                totalNetWorth += asset.value;
+                assetCount++;
+                if (asset.category === "Cash") availableCash += asset.value;
+                categoryTotals[asset.category] = (categoryTotals[asset.category] || 0) + asset.value;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="px-6 py-4 font-medium text-slate-900">${asset.name}</td>
+                        <td class="px-6 py-4 text-slate-500">${asset.category}</td>
+                        <td class="px-6 py-4 text-right">1</td>
+                        <td class="px-6 py-4 text-right font-medium text-slate-900">$${asset.value.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="deleteManualAsset('${asset.id}')" class="text-red-500 hover:text-red-700 font-bold text-xs p-2">Remove</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // --- PROCESS TRACKED TRADES ---
+            for (let ticker in globalTradeHoldings) {
+                const holding = globalTradeHoldings[ticker];
+                totalNetWorth += holding.totalValue;
+                assetCount++;
+                categoryTotals[holding.category] = (categoryTotals[holding.category] || 0) + holding.totalValue;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100 bg-slate-50/50">
+                        <td class="px-6 py-4 font-bold text-slate-900">${ticker} <span class="text-[10px] ml-1 text-turkuaz bg-teal-50 px-1 rounded">Live</span></td>
+                        <td class="px-6 py-4 text-slate-500">${holding.category}</td>
+                        <td class="px-6 py-4 text-right">${holding.qty.toLocaleString()}</td>
+                        <td class="px-6 py-4 text-right font-medium text-slate-900">$${holding.totalValue.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-xs text-slate-400">Manage in Tracker</span>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            if (assetCount === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-slate-500">No assets found. Add an asset or log a trade!</td></tr>';
+            }
+
+            // Update UI Numbers
+            document.getElementById('totalNetWorth').innerText = "$" + totalNetWorth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('availableCash').innerText = "$" + availableCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('assetCount').innerText = assetCount;
+
+            updateChart(categoryTotals);
+        }
+
+        // 8. CHART.JS
         function updateChart(categoryData) {
             const ctx = document.getElementById('allocationChart').getContext('2d');
-            
-            // Extract labels (e.g., "Stocks", "Cash") and their values
             const labels = Object.keys(categoryData);
             const data = Object.values(categoryData);
 
-            // If a chart already exists, destroy it before drawing a new one to prevent visual glitches
-            if (myChart) {
-                myChart.destroy();
-            }
-
-            // Define custom colors for the chart
+            if (myChart) myChart.destroy();
             const colors = ['#0d9488', '#334155', '#94a3b8', '#ccfbf1', '#0f766e', '#cbd5e1'];
 
             myChart = new Chart(ctx, {
@@ -292,27 +344,12 @@
                 data: {
                     labels: labels.length > 0 ? labels : ['No Assets'],
                     datasets: [{
-                        data: data.length > 0 ? data : [1], // Show a grey ring if empty
+                        data: data.length > 0 ? data : [1],
                         backgroundColor: data.length > 0 ? colors.slice(0, data.length) : ['#e2e8f0'],
-                        borderWidth: 0,
-                        hoverOffset: 4
+                        borderWidth: 0, hoverOffset: 4
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true,
-                                font: { family: "'Inter', sans-serif" }
-                            }
-                        }
-                    },
-                    cutout: '75%'
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, cutout: '75%' }
             });
         }
     </script>
