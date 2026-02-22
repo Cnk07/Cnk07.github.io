@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.google.com/recaptcha/api.js?render=6Ld_6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - Paydas Portfolio</title>
@@ -129,7 +129,7 @@ async function signInUser(email, password) {
 
     // 2. Trigger reCAPTCHA v3
     grecaptcha.ready(function() {
-        grecaptcha.execute('6Ld_YOUR_ACTUAL_SITE_KEY', {action: 'login'}).then(async (token) => { [cite: 2026-02-21]
+        grecaptcha.execute('6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e', {action: 'login'}).then(async (token) => { [cite: 2026-02-21]
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 
