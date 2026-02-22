@@ -14,6 +14,7 @@
     </style>
 </head>
 <body class="bg-slate-50 flex h-screen overflow-hidden hidden" id="secure-body">
+
     <aside class="w-64 bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 hidden md:flex">
         <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
             <div class="h-8 w-8 bg-turkuaz rounded flex items-center justify-center font-bold text-lg">P</div>
@@ -46,30 +47,30 @@
                 <h1 class="text-2xl font-bold text-slate-900">Dashboard</h1>
                 <p class="text-sm text-slate-500 mt-1">Welcome back, <span id="user-display" class="font-medium text-turkuaz">Loading...</span></p>
             </div>
-            <button class="bg-turkuaz text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition shadow-md text-sm">
-                + New Trade
+            <button id="openModalBtn" class="bg-turkuaz text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition shadow-md text-sm">
+                + New Asset
             </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+        <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 relative">
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-sm font-medium text-slate-500 mb-1">Total Net Worth</p>
-                    <h3 class="text-3xl font-bold text-slate-900">$248,500.00</h3>
+                    <h3 id="totalNetWorth" class="text-3xl font-bold text-slate-900">$0.00</h3>
                 </div>
                 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-sm font-medium text-slate-500 mb-1">Daily Profit/Loss</p>
                     <div class="flex items-baseline space-x-2">
-                        <h3 class="text-3xl font-bold text-green-600">+$1,240.50</h3>
-                        <span class="text-sm font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">+0.5%</span>
+                        <h3 class="text-3xl font-bold text-slate-400">N/A</h3>
+                        <span class="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Requires History</span>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-sm font-medium text-slate-500 mb-1">Available Cash</p>
-                    <h3 class="text-3xl font-bold text-slate-900">$18,400.00</h3>
+                    <h3 id="availableCash" class="text-3xl font-bold text-slate-900">$0.00</h3>
                 </div>
             </div>
 
@@ -77,7 +78,7 @@
                 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 lg:col-span-1 flex flex-col">
                     <h3 class="text-lg font-bold text-slate-900 mb-6">Asset Allocation</h3>
-                    <div class="flex-1 relative w-full flex justify-center items-center">
+                    <div class="flex-1 relative w-full flex justify-center items-center min-h-[250px]">
                         <canvas id="allocationChart"></canvas>
                     </div>
                 </div>
@@ -91,94 +92,202 @@
                             <thead>
                                 <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
                                     <th class="px-6 py-3 font-medium">Asset Name</th>
-                                    <th class="px-6 py-3 font-medium">Ticker</th>
+                                    <th class="px-6 py-3 font-medium">Category</th>
                                     <th class="px-6 py-3 font-medium text-right">Qty</th>
-                                    <th class="px-6 py-3 font-medium text-right">Current Price</th>
                                     <th class="px-6 py-3 font-medium text-right">Total Value</th>
                                     <th class="px-6 py-3 font-medium text-right">ROI</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 text-sm">
-                                <tr class="hover:bg-slate-50 transition">
-                                    <td class="px-6 py-4 font-medium text-slate-900">Apple Inc.</td>
-                                    <td class="px-6 py-4 text-slate-500">AAPL</td>
-                                    <td class="px-6 py-4 text-right">150</td>
-                                    <td class="px-6 py-4 text-right">$185.00</td>
-                                    <td class="px-6 py-4 text-right font-medium text-slate-900">$27,750.00</td>
-                                    <td class="px-6 py-4 text-right text-green-600 font-medium">+12.4%</td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition">
-                                    <td class="px-6 py-4 font-medium text-slate-900">Vanguard S&P 500 ETF</td>
-                                    <td class="px-6 py-4 text-slate-500">VOO</td>
-                                    <td class="px-6 py-4 text-right">200</td>
-                                    <td class="px-6 py-4 text-right">$450.20</td>
-                                    <td class="px-6 py-4 text-right font-medium text-slate-900">$90,040.00</td>
-                                    <td class="px-6 py-4 text-right text-green-600 font-medium">+8.2%</td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition">
-                                    <td class="px-6 py-4 font-medium text-slate-900">Tesla Inc.</td>
-                                    <td class="px-6 py-4 text-slate-500">TSLA</td>
-                                    <td class="px-6 py-4 text-right">50</td>
-                                    <td class="px-6 py-4 text-right">$190.50</td>
-                                    <td class="px-6 py-4 text-right font-medium text-slate-900">$9,525.00</td>
-                                    <td class="px-6 py-4 text-right text-red-500 font-medium">-4.1%</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="positionsTableBody" class="divide-y divide-slate-100 text-sm">
+                                </tbody>
                         </table>
+                        <p id="noDataMsg" class="text-center py-8 text-slate-500 hidden">No assets found. Add a new asset to build your portfolio.</p>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <div id="addAssetModal" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200">
+                <h2 class="text-2xl font-bold mb-6 text-slate-900">Add New Trade / Asset</h2>
+                <form id="addAssetForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Asset Name (e.g. Apple Inc, W176)</label>
+                        <input type="text" id="assetName" required class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz focus:border-turkuaz outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Category</label>
+                        <select id="assetCategory" class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz focus:border-turkuaz outline-none">
+                            <option value="Stocks">Stocks / Mutual Funds</option>
+                            <option value="Cash">Cash / Bank</option>
+                            <option value="Vehicle">Vehicle</option>
+                            <option value="Commodities">Commodities</option>
+                            <option value="Crypto">Cryptocurrency</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Total Estimated Value ($)</label>
+                        <input type="number" id="assetValue" required min="0" step="0.01" class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz focus:border-turkuaz outline-none">
+                    </div>
+                    <div class="flex space-x-3 mt-8 pt-4">
+                        <button type="button" id="closeModalBtn" class="flex-1 bg-slate-100 text-slate-700 py-2.5 rounded-lg font-bold hover:bg-slate-200 transition">Cancel</button>
+                        <button type="submit" id="saveAssetBtn" class="flex-1 bg-turkuaz text-white py-2.5 rounded-lg font-bold hover:bg-teal-700 transition">Save Asset</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
 
     <script type="module">
-        // --- 1. FIREBASE AUTHENTICATION ---
+        // 1. FIREBASE IMPORTS
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ⚠️ PASTE YOUR FIREBASE CONFIG KEYS HERE ⚠️
+        // 2. YOUR EXACT FIREBASE CONFIG
         const firebaseConfig = {
-apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q", authDomain: "paydas-potrfolio.firebaseapp.com", projectId: "paydas-potrfolio", storageBucket: "paydas-potrfolio.firebasestorage.app", messagingSenderId: "1064349640309", appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
+            apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+            authDomain: "paydas-potrfolio.firebaseapp.com",
+            projectId: "paydas-potrfolio",
+            storageBucket: "paydas-potrfolio.firebasestorage.app",
+            messagingSenderId: "1064349640309",
+            appId: "1:1064349640309:web:06e113a6cc7343db313a3c"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // Security Guard
+        let currentUserUID = null;
+        let myChart = null; // Holds the Chart.js instance
+
+        // 3. AUTHENTICATION GUARD
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Reveal dashboard and set name
                 document.getElementById('secure-body').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.displayName || user.email;
+                currentUserUID = user.uid;
+                
+                // Fetch data once logged in
+                loadUserPortfolio(currentUserUID);
             } else {
-                // Eject unauthenticated users
                 window.location.replace("login.html");
             }
         });
 
-        // Logout Logic
         document.getElementById('logoutBtn').addEventListener('click', () => {
             signOut(auth).then(() => window.location.href = "login.html");
         });
 
-        // --- 2. CHART.JS INITIALIZATION ---
-        // We wait for the DOM to load to ensure the canvas exists
-        document.addEventListener('DOMContentLoaded', function() {
+        // 4. MODAL UI LOGIC
+        const modal = document.getElementById('addAssetModal');
+        document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
+        document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
+
+        // 5. WRITE DATA TO FIRESTORE
+        document.getElementById('addAssetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveAssetBtn');
+            saveBtn.innerText = "Saving...";
+
+            try {
+                await addDoc(collection(db, "assets"), {
+                    userId: currentUserUID,
+                    name: document.getElementById('assetName').value,
+                    category: document.getElementById('assetCategory').value,
+                    value: parseFloat(document.getElementById('assetValue').value),
+                    timestamp: new Date().toISOString()
+                });
+                document.getElementById('addAssetForm').reset();
+                modal.classList.add('hidden');
+            } catch (error) {
+                alert("Database Error: " + error.message);
+            } finally {
+                saveBtn.innerText = "Save Asset";
+            }
+        });
+
+        // 6. READ DATA FROM FIRESTORE (REAL-TIME ENGINE)
+        function loadUserPortfolio(uid) {
+            const q = query(collection(db, "assets"), where("userId", "==", uid));
+
+            onSnapshot(q, (snapshot) => {
+                const tbody = document.getElementById('positionsTableBody');
+                const noDataMsg = document.getElementById('noDataMsg');
+                
+                tbody.innerHTML = ''; 
+                
+                let totalNetWorth = 0;
+                let availableCash = 0;
+                let categoryTotals = {}; // Prepares data for the Donut Chart
+
+                if (snapshot.empty) {
+                    noDataMsg.classList.remove('hidden');
+                    updateChart({}); // Empty chart
+                } else {
+                    noDataMsg.classList.add('hidden');
+                    
+                    snapshot.forEach((doc) => {
+                        const asset = doc.data();
+                        
+                        // Calculate Totals
+                        totalNetWorth += asset.value;
+                        if (asset.category === "Cash") {
+                            availableCash += asset.value;
+                        }
+
+                        // Aggregate data for the Chart
+                        if (categoryTotals[asset.category]) {
+                            categoryTotals[asset.category] += asset.value;
+                        } else {
+                            categoryTotals[asset.category] = asset.value;
+                        }
+                        
+                        // Inject Table Rows
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition";
+                        tr.innerHTML = `
+                            <td class="px-6 py-4 font-medium text-slate-900">${asset.name}</td>
+                            <td class="px-6 py-4 text-slate-500">${asset.category}</td>
+                            <td class="px-6 py-4 text-right">1</td>
+                            <td class="px-6 py-4 text-right font-medium text-slate-900">$${asset.value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                            <td class="px-6 py-4 text-right text-slate-400 font-medium">N/A</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    updateChart(categoryTotals);
+                }
+
+                // Update the Top Cards
+                document.getElementById('totalNetWorth').innerText = "$" + totalNetWorth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                document.getElementById('availableCash').innerText = "$" + availableCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            });
+        }
+
+        // 7. CHART.JS RENDER LOGIC
+        function updateChart(categoryData) {
             const ctx = document.getElementById('allocationChart').getContext('2d');
             
-            new Chart(ctx, {
+            // Extract labels (e.g., "Stocks", "Cash") and their values
+            const labels = Object.keys(categoryData);
+            const data = Object.values(categoryData);
+
+            // If a chart already exists, destroy it before drawing a new one to prevent visual glitches
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Define custom colors for the chart
+            const colors = ['#0d9488', '#334155', '#94a3b8', '#ccfbf1', '#0f766e', '#cbd5e1'];
+
+            myChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Stocks', 'Mutual Funds', 'Commodities', 'Cash'],
+                    labels: labels.length > 0 ? labels : ['No Assets'],
                     datasets: [{
-                        data: [55, 25, 10, 10],
-                        backgroundColor: [
-                            '#0d9488', // Turkuaz
-                            '#334155', // Slate 700
-                            '#94a3b8', // Slate 400
-                            '#ccfbf1'  // Teal 100
-                        ],
+                        data: data.length > 0 ? data : [1], // Show a grey ring if empty
+                        backgroundColor: data.length > 0 ? colors.slice(0, data.length) : ['#e2e8f0'],
                         borderWidth: 0,
                         hoverOffset: 4
                     }]
@@ -196,10 +305,10 @@ apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q", authDomain: "paydas-potrfolio
                             }
                         }
                     },
-                    cutout: '75%' // Makes it a sleek modern donut
+                    cutout: '75%'
                 }
             });
-        });
+        }
     </script>
 </body>
 </html>
