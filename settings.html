@@ -1,0 +1,17 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h3 class="text-lg font-bold text-slate-900 mb-4">Active Sessions</h3>
+        <div id="sessionList" class="space-y-4">
+            </div>
+        <button onclick="revokeOtherSessions()" class="mt-6 w-full py-2 border-2 border-red-100 text-red-500 font-bold rounded-lg hover:bg-red-50 transition">
+            Logout from all other devices
+        </button>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h3 class="text-lg font-bold text-slate-900 mb-4">Security Activity</h3>
+        <div id="auditLogs" class="space-y-3 overflow-y-auto max-h-[400px]">
+            </div>
+    </div>
+</div>
