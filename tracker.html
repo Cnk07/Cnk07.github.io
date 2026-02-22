@@ -331,58 +331,70 @@
             }
         });
 
-        // --- ISSUE 4: FAIL-SAFE HOLDINGS TABLE ---
-        function loadAndCalculateHoldings(uid) {
-            const q = query(collection(db, "trades"), where("userId", "==", uid), orderBy("date", "asc"));
+        // REPLACE your current loadAndCalculateHoldings function with this:
+function loadAndCalculateHoldings(uid) {
+    const q = query(collection(db, "trades"), where("userId", "==", uid), orderBy("date", "asc"));
 
-            onSnapshot(q, async (snapshot) => {
-                const holdingsMap = {}; 
+    onSnapshot(q, async (snapshot) => {
+        const holdingsMap = {}; 
 
-                snapshot.forEach((doc) => {
-                    const trade = doc.data();
-                    const ticker = trade.ticker;
+        snapshot.forEach((doc) => {
+            const trade = doc.data();
+            const ticker = trade.ticker;
+            if (!holdingsMap[ticker]) holdingsMap[ticker] = { qty: 0, totalCost: 0 };
 
-                    if (!holdingsMap[ticker]) holdingsMap[ticker] = { qty: 0, totalCost: 0 };
+            if (trade.type === "Buy") {
+                holdingsMap[ticker].qty += trade.qty;
+                holdingsMap[ticker].totalCost += (trade.qty * trade.price);
+            } else if (trade.type === "Sell" && holdingsMap[ticker].qty > 0) {
+                const currentAvgCost = holdingsMap[ticker].totalCost / holdingsMap[ticker].qty;
+                holdingsMap[ticker].qty -= trade.qty;
+                holdingsMap[ticker].totalCost -= (trade.qty * currentAvgCost);
+            }
+        });
 
-                    if (trade.type === "Buy") {
-                        holdingsMap[ticker].qty += trade.qty;
-                        holdingsMap[ticker].totalCost += (trade.qty * trade.price);
-                    } else if (trade.type === "Sell" && holdingsMap[ticker].qty > 0) {
-                        const currentAvgCost = holdingsMap[ticker].totalCost / holdingsMap[ticker].qty;
-                        holdingsMap[ticker].qty -= trade.qty;
-                        holdingsMap[ticker].totalCost -= (trade.qty * currentAvgCost);
-                    }
-                });
-
-                const activeTickers = Object.keys(holdingsMap).filter(t => holdingsMap[t].qty > 0.0001);
-                
-                if (activeTickers.length === 0) {
-                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">No active holdings found in your database. Log a trade above.</td></tr>';
-                    return;
-                }
-
-                // FAIL-SAFE: Draw the table IMMEDIATELY using Average Costs, so it doesn't get stuck loading!
-                renderHoldingsTable(activeTickers, holdingsMap, {}, true);
-
-                // Now go fetch the live data in the background
-                const livePrices = {};
-                for (const ticker of activeTickers) {
-                    try {
-                        const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_API_KEY}`);
-                        const data = await res.json();
-                        // Get current price, or previous close if market closed
-                        livePrices[ticker] = data.c || data.pc || (holdingsMap[ticker].totalCost / holdingsMap[ticker].qty);
-                    } catch (e) {
-                        console.error("API Fetch failed for", ticker);
-                        // If API completely fails, fall back to average cost
-                        livePrices[ticker] = holdingsMap[ticker].totalCost / holdingsMap[ticker].qty;
-                    }
-                }
-
-                // Re-draw table with live data
-                renderHoldingsTable(activeTickers, holdingsMap, livePrices, false);
-            });
+        const activeTickers = Object.keys(holdingsMap).filter(t => holdingsMap[t].qty > 0.0001);
+        
+        if (activeTickers.length === 0) {
+            document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">No active holdings found. Log a trade above.</td></tr>';
+            return;
         }
+
+        // --- NEW: CACHE LOGIC ---
+        // 1. Try to get "remembered" prices from the browser
+        const cachedData = JSON.parse(localStorage.getItem('paydas_price_cache') || '{}');
+        const now = Date.now();
+        // Check if the cache is less than 5 minutes old
+        const isCacheValid = cachedData.timestamp && (now - cachedData.timestamp < 300000);
+
+        // 2. Render IMMEDIATELY using cached prices (or avg cost if no cache exists)
+        renderHoldingsTable(activeTickers, holdingsMap, cachedData.prices || {}, !isCacheValid);
+
+        // 3. Only call Finnhub if the cache is old or missing
+        if (!isCacheValid) {
+            console.log("Fetching fresh prices from Finnhub...");
+            const livePrices = {};
+            for (const ticker of activeTickers) {
+                try {
+                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_API_KEY}`);
+                    const data = await res.json();
+                    livePrices[ticker] = data.c || data.pc || (holdingsMap[ticker].totalCost / holdingsMap[ticker].qty);
+                } catch (e) {
+                    livePrices[ticker] = holdingsMap[ticker].totalCost / holdingsMap[ticker].qty;
+                }
+            }
+            
+            // Save the new prices to the browser memory
+            localStorage.setItem('paydas_price_cache', JSON.stringify({
+                timestamp: Date.now(),
+                prices: livePrices
+            }));
+
+            // Re-render the table with the fresh prices
+            renderHoldingsTable(activeTickers, holdingsMap, livePrices, false);
+        }
+    });
+}
 
         // --- UI: RENDER TABLE ---
         function renderHoldingsTable(tickers, holdingsMap, livePrices, isLoading) {
