@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Center - Paydas Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-turkuaz { color: #0d9488; }
+        .bg-turkuaz { background-color: #0d9488; }
+        
+        /* Custom styles for the Buy/Sell Toggle */
+        .toggle-radio:checked + div { color: white; }
+        #buyRadio:checked + div { background-color: #16a34a; border-color: #16a34a; } /* Green */
+        #sellRadio:checked + div { background-color: #dc2626; border-color: #dc2626; } /* Red */
+    </style>
+</head>
+<body class="bg-slate-50 flex flex-col h-screen overflow-hidden">
+
+    <header class="bg-white border-b border-slate-200 p-4 px-8 flex justify-between items-center z-10 shadow-sm shrink-0">
+        <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-3">
+                <div class="h-8 w-8 bg-turkuaz rounded flex items-center justify-center font-bold text-white text-lg">P</div>
+                <span class="text-xl font-bold tracking-tight text-slate-900">PAYDAS</span>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="dashboard.html" class="text-slate-500 hover:text-turkuaz font-medium transition">Dashboard</a>
+                <a href="trade.html" class="text-turkuaz font-bold border-b-2 border-turkuaz pb-4 -mb-4">Trade Center</a>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-4 text-sm font-medium">
+            <span class="text-slate-500">Buying Power: <span id="headerCash" class="text-slate-900 font-bold">$18,400.00</span></span>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-6 md:p-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50">
+                        <h2 class="text-lg font-bold text-slate-900">Order Ticket</h2>
+                    </div>
+                    
+                    <form id="tradeForm" class="p-6 space-y-6">
+                        
+                        <div class="flex space-x-2">
+                            <label class="flex-1 cursor-pointer relative">
+                                <input type="radio" name="orderAction" id="buyRadio" value="Buy" class="sr-only toggle-radio" checked>
+                                <div class="py-2 text-center border border-slate-300 rounded-lg font-bold text-slate-600 transition-colors">Buy</div>
+                            </label>
+                            <label class="flex-1 cursor-pointer relative">
+                                <input type="radio" name="orderAction" id="sellRadio" value="Sell" class="sr-only toggle-radio">
+                                <div class="py-2 text-center border border-slate-300 rounded-lg font-bold text-slate-600 transition-colors">Sell</div>
+                            </label>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Asset / Ticker</label>
+                            <select id="assetSelect" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-turkuaz outline-none transition">
+                                <option value="AAPL">Apple Inc. (AAPL)</option>
+                                <option value="VOO">Vanguard S&P 500 (VOO)</option>
+                                <option value="TSLA">Tesla Inc. (TSLA)</option>
+                            </select>
+                            <p id="holdingsText" class="text-xs text-slate-500 mt-1 font-medium">Currently holding: 150 shares</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Order Type</label>
+                            <select id="orderType" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-turkuaz outline-none transition">
+                                <option value="Market">Market Order</option>
+                                <option value="Limit">Limit Order</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Quantity</label>
+                                <input type="number" id="orderQty" min="1" step="1" value="1" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-turkuaz outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Price ($)</label>
+                                <input type="number" id="orderPrice" min="0" step="0.01" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-500 focus:ring-2 focus:ring-turkuaz outline-none transition" readonly>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <span id="summaryLabel" class="text-sm font-medium text-slate-500">Estimated Cost</span>
+                                <span id="summaryTotal" class="text-xl font-bold text-slate-900">$0.00</span>
+                            </div>
+                            <p id="ticketError" class="text-xs font-bold text-red-500 mt-2 hidden">Error: Insufficient funds.</p>
+                        </div>
+
+                        <button type="button" id="previewBtn" class="w-full bg-turkuaz text-white font-bold py-3 rounded-lg hover:bg-teal-700 transition shadow-md disabled:bg-slate-300 disabled:cursor-not-allowed">
+                            Preview Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                
+                <div class="flex space-x-1 bg-slate-200/50 p-1 rounded-lg w-fit">
+                    <button id="tabPending" class="px-6 py-2 rounded-md font-bold text-sm bg-white shadow-sm text-slate-900 transition">Pending Orders</button>
+                    <button id="tabRecent" class="px-6 py-2 rounded-md font-bold text-sm text-slate-500 hover:text-slate-900 transition">Recent Activity</button>
+                </div>
+
+                <div id="viewPending" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                <th class="px-6 py-4 font-medium">Asset</th>
+                                <th class="px-6 py-4 font-medium">Type</th>
+                                <th class="px-6 py-4 font-medium text-right">Qty</th>
+                                <th class="px-6 py-4 font-medium text-right">Limit Price</th>
+                                <th class="px-6 py-4 font-medium text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingTableBody" class="divide-y divide-slate-100 text-sm">
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="px-6 py-4 font-bold text-slate-900">TSLA <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded ml-2">Buy</span></td>
+                                <td class="px-6 py-4 text-slate-500">Limit</td>
+                                <td class="px-6 py-4 text-right">10</td>
+                                <td class="px-6 py-4 text-right font-medium">$180.00</td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="text-red-500 font-bold text-xs hover:underline">Cancel</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="viewRecent" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                <th class="px-6 py-4 font-medium">Date</th>
+                                <th class="px-6 py-4 font-medium">Asset</th>
+                                <th class="px-6 py-4 font-medium text-right">Total Value</th>
+                                <th class="px-6 py-4 font-medium text-right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentTableBody" class="divide-y divide-slate-100 text-sm">
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="px-6 py-4 text-slate-500">Feb 23, 10:15 AM</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">AAPL <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded ml-2">Buy</span></td>
+                                <td class="px-6 py-4 text-right font-medium">$2,775.00</td>
+                                <td class="px-6 py-4 text-right"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Filled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="confirmModal" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 transform scale-95 transition-transform duration-200" id="modalCard">
+            <h2 class="text-2xl font-bold mb-2 text-slate-900">Review Order</h2>
+            <p class="text-slate-500 text-sm mb-6">Please confirm the details of your trade below.</p>
+            
+            <div class="bg-slate-50 rounded-lg p-4 space-y-3 mb-8 border border-slate-100">
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Action</span>
+                    <span id="modalAction" class="font-bold text-slate-900 uppercase">BUY</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Asset</span>
+                    <span id="modalAsset" class="font-bold text-slate-900">AAPL</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Order Type</span>
+                    <span id="modalType" class="font-bold text-slate-900">Market</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Quantity</span>
+                    <span id="modalQty" class="font-bold text-slate-900">0</span>
+                </div>
+                <div class="pt-3 border-t border-slate-200 flex justify-between">
+                    <span class="font-medium text-slate-700">Estimated Total</span>
+                    <span id="modalTotal" class="text-lg font-bold text-slate-900">$0.00</span>
+                </div>
+            </div>
+
+            <div class="flex space-x-3">
+                <button id="cancelModalBtn" class="flex-1 bg-slate-100 text-slate-700 py-3 rounded-lg font-bold hover:bg-slate-200 transition">Cancel</button>
+                <button id="confirmTradeBtn" class="flex-1 bg-turkuaz text-white py-3 rounded-lg font-bold hover:bg-teal-700 transition shadow-md">Confirm Trade</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. MOCK STATE (In a real app, this comes from Firestore) ---
+        const userState = {
+            availableCash: 18400.00,
+            portfolio: {
+                'AAPL': 150,
+                'VOO': 200,
+                'TSLA': 50
+            }
+        };
+
+        const liveMarketPrices = {
+            'AAPL': 185.00,
+            'VOO': 450.20,
+            'TSLA': 190.50
+        };
+
+        // --- 2. DOM ELEMENTS ---
+        const form = {
+            actionRadios: document.querySelectorAll('input[name="orderAction"]'),
+            asset: document.getElementById('assetSelect'),
+            type: document.getElementById('orderType'),
+            qty: document.getElementById('orderQty'),
+            price: document.getElementById('orderPrice'),
+            holdingsText: document.getElementById('holdingsText'),
+            summaryLabel: document.getElementById('summaryLabel'),
+            summaryTotal: document.getElementById('summaryTotal'),
+            previewBtn: document.getElementById('previewBtn'),
+            errorText: document.getElementById('ticketError')
+        };
+
+        // --- 3. ENGINE: REAL-TIME CALCULATION & VALIDATION ---
+        function calculateOrder() {
+            // Get current values
+            const isBuy = document.getElementById('buyRadio').checked;
+            const asset = form.asset.value;
+            const qty = parseFloat(form.qty.value) || 0;
+            const price = parseFloat(form.price.value) || 0;
+            
+            // Calculate Total
+            const total = qty * price;
+            
+            // Update UI Labels
+            form.summaryLabel.innerText = isBuy ? "Estimated Cost" : "Estimated Proceeds";
+            form.summaryTotal.innerText = "$" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+            form.summaryTotal.className = isBuy ? "text-xl font-bold text-slate-900" : "text-xl font-bold text-green-600";
+            
+            // Validate Logic
+            let isValid = true;
+            let errorMsg = "";
+
+            if (qty <= 0) {
+                isValid = false;
+                errorMsg = "Quantity must be greater than 0.";
+            } else if (price <= 0) {
+                isValid = false;
+                errorMsg = "Price must be greater than 0.";
+            } else if (isBuy && total > userState.availableCash) {
+                isValid = false;
+                errorMsg = `Insufficient funds. Need $${total.toLocaleString()} but only have $${userState.availableCash.toLocaleString()}.`;
+            } else if (!isBuy && qty > (userState.portfolio[asset] || 0)) {
+                isValid = false;
+                errorMsg = `Insufficient shares. You only hold ${userState.portfolio[asset] || 0} shares of ${asset}.`;
+            }
+
+            // Apply Validation State to UI
+            if (!isValid) {
+                form.errorText.innerText = errorMsg;
+                form.errorText.classList.remove('hidden');
+                form.previewBtn.disabled = true;
+            } else {
+                form.errorText.classList.add('hidden');
+                form.previewBtn.disabled = false;
+            }
+        }
+
+        // --- 4. EVENT LISTENERS FOR REACTIVE UI ---
+        
+        // Handle Order Type Change (Market vs Limit)
+        form.type.addEventListener('change', () => {
+            if (form.type.value === 'Market') {
+                form.price.readOnly = true;
+                form.price.classList.add('bg-slate-100', 'text-slate-500');
+                form.price.value = liveMarketPrices[form.asset.value];
+            } else {
+                form.price.readOnly = false;
+                form.price.classList.remove('bg-slate-100', 'text-slate-500');
+            }
+            calculateOrder();
+        });
+
+        // Handle Asset Change
+        form.asset.addEventListener('change', () => {
+            const asset = form.asset.value;
+            const holdings = userState.portfolio[asset] || 0;
+            form.holdingsText.innerText = `Currently holding: ${holdings} shares`;
+            
+            if (form.type.value === 'Market') {
+                form.price.value = liveMarketPrices[asset];
+            }
+            calculateOrder();
+        });
+
+        // Listen to all inputs to trigger calculations
+        form.qty.addEventListener('input', calculateOrder);
+        form.price.addEventListener('input', calculateOrder);
+        form.actionRadios.forEach(radio => radio.addEventListener('change', calculateOrder));
+
+        // Initialize form on load
+        form.price.value = liveMarketPrices['AAPL'];
+        calculateOrder();
+
+        // --- 5. MODAL & SUBMISSION FLOW ---
+        const modal = document.getElementById('confirmModal');
+        const modalCard = document.getElementById('modalCard');
+
+        form.previewBtn.addEventListener('click', () => {
+            // Populate Modal Data
+            document.getElementById('modalAction').innerText = document.getElementById('buyRadio').checked ? "BUY" : "SELL";
+            document.getElementById('modalAction').className = document.getElementById('buyRadio').checked ? "font-bold text-green-600 uppercase" : "font-bold text-red-600 uppercase";
+            document.getElementById('modalAsset').innerText = form.asset.value;
+            document.getElementById('modalType').innerText = form.type.value;
+            document.getElementById('modalQty').innerText = form.qty.value;
+            document.getElementById('modalTotal').innerText = form.summaryTotal.innerText;
+
+            // Show Modal with animation
+            modal.classList.remove('hidden');
+            setTimeout(() => modalCard.classList.replace('scale-95', 'scale-100'), 10);
+        });
+
+        document.getElementById('cancelModalBtn').addEventListener('click', () => {
+            modalCard.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        });
+
+        document.getElementById('confirmTradeBtn').addEventListener('click', () => {
+            const btn = document.getElementById('confirmTradeBtn');
+            btn.innerText = "Processing...";
+            
+            // SIMULATE API/FIREBASE CALL
+            setTimeout(() => {
+                // Here is where you would call: await addDoc(collection(db, "orders"), { ... })
+                alert("Trade Executed Successfully!");
+                window.location.reload(); // Refresh to clear state
+            }, 800);
+        });
+
+        // --- 6. TAB NAVIGATION LOGIC ---
+        const tabPending = document.getElementById('tabPending');
+        const tabRecent = document.getElementById('tabRecent');
+        const viewPending = document.getElementById('viewPending');
+        const viewRecent = document.getElementById('viewRecent');
+
+        function switchTab(activeTab, inactiveTab, activeView, inactiveView) {
+            // Update Tab Styles
+            activeTab.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+            activeTab.classList.remove('text-slate-500', 'hover:text-slate-900');
+            
+            inactiveTab.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+            inactiveTab.classList.add('text-slate-500', 'hover:text-slate-900');
+            
+            // Toggle Views
+            activeView.classList.remove('hidden');
+            inactiveView.classList.add('hidden');
+        }
+
+        tabPending.addEventListener('click', () => switchTab(tabPending, tabRecent, viewPending, viewRecent));
+        tabRecent.addEventListener('click', () => switchTab(tabRecent, tabPending, viewRecent, viewPending));
+
+    </script>
+</body>
+</html>
