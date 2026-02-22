@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld_YOUR_ACTUAL_SITE_KEY"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - Paydas Portfolio</title>
@@ -105,6 +106,16 @@
         const errorMessageEl = document.getElementById('error-message');
 
         // --- LOGIN LOGIC ---
+    // Inside login.html <script>
+let loginAttempts = 0;
+
+async function signInUser(email, password) {
+    if (loginAttempts >= 5) {
+        alert("Security Lock: Too many attempts. Please wait.");
+        return; 
+    }
+    
+    // ... rest of your firebase login code ...
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault(); 
             errorMessageEl.classList.add('hidden');
