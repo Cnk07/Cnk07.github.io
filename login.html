@@ -147,7 +147,12 @@
                     await logSecurityEvent(userCredential.user.uid, "Successful Login");
                     
                     loginAttempts = 0; 
-                    window.location.href = "dashboard.html";
+                   // Change this logic in login.html and register.html
+if (userCredential.user.emailVerified) {
+    window.location.href = "dashboard.html";
+} else {
+    window.location.href = "verify.html";
+}
                 } catch (error) {
                     loginAttempts++; 
                     await logSecurityEvent("UNKNOWN", `Failed Login: ${error.code}`);
