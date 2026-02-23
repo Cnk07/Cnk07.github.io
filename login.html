@@ -85,108 +85,108 @@
         </div>
     </div>
 <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    // EKSİK OLANLAR EKLENDİ: getFirestore, collection, addDoc
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ⚠️ PASTE YOUR FIREBASE CONFIG KEYS HERE ⚠️
-        const firebaseConfig = {
-          apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
-          authDomain: "paydas-potrfolio.firebaseapp.com",
-          projectId: "paydas-potrfolio",
-          storageBucket: "paydas-potrfolio.firebasestorage.app",
-          messagingSenderId: "1064349640309",
-          appId: "1:1064349640309:web:06e113a6cc7343db313a3c",
-          measurementId: "G-NM2CVJWHS5"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
+        authDomain: "paydas-potrfolio.firebaseapp.com",
+        projectId: "paydas-potrfolio",
+        storageBucket: "paydas-potrfolio.firebasestorage.app",
+        messagingSenderId: "1064349640309",
+        appId: "1:1064349640309:web:06e113a6cc7343db313a3c",
+        measurementId: "G-NM2CVJWHS5"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app); // Firestore başlatıldı
 
-        const loginForm = document.getElementById('loginForm');
-        const errorMessageEl = document.getElementById('error-message');
+    const loginForm = document.getElementById('loginForm');
+    const errorMessageEl = document.getElementById('error-message');
 
-        // --- LOGIN LOGIC ---
-    // Inside login.html <script>
-let loginAttempts = 0;
-const MAX_ATTEMPTS = 5;
-async function signInUser(email, password) {
-    if (loginAttempts >= 5) {
-        alert("Security Lock: Too many attempts. Please wait.");
-        return; 
+    // Güvenlik Ayarları
+    let loginAttempts = 0;
+    const MAX_ATTEMPTS = 5;
+
+    // --- LOG SECURITY EVENT FONKSİYONU ---
+    async function logSecurityEvent(uid, action) {
+        try {
+            await addDoc(collection(db, "security_logs"), {
+                userId: uid,
+                action: action,
+                timestamp: new Date().toISOString(),
+                device: navigator.platform,
+                browser: navigator.userAgent
+            });
+        } catch (err) {
+            console.error("Güvenlik kaydı hatası:", err);
+        }
     }
-    
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
 
-    // 1. Check if user is locked out
-    if (loginAttempts >= MAX_ATTEMPTS) {
-        alert("Security Lock: Too many failed attempts. Please try again later."); [cite: 2026-02-21]
-        return;
-    }
+    // --- LOGIN LOGIC ---
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMessageEl.classList.add('hidden');
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+        // 1. Brute Force Koruması
+        if (loginAttempts >= MAX_ATTEMPTS) {
+            alert("Security Lock: Too many failed attempts. Please try again later.");
+            return;
+        }
 
-    // 2. Trigger reCAPTCHA v3
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e', {action: 'login'}).then(async (token) => { [cite: 2026-02-21]
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                
-                // Log success to Firebase for your audit trail
-                await logSecurityEvent(userCredential.user.uid, "Successful Login"); [cite: 2026-02-21]
-                
-                loginAttempts = 0; // Reset counter on success
-                window.location.href = "dashboard.html";
-            } catch (error) {
-                loginAttempts++; // Increment failures
-                await logSecurityEvent("UNKNOWN", `Failed Login: ${error.code}`); [cite: 2026-02-21]
-                alert("Invalid email or password.");
-            }
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // 2. reCAPTCHA v3 Tetikleme
+        grecaptcha.ready(function() {
+            // Senin verdiğin key kullanıldı
+            grecaptcha.execute('6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e', {action: 'login'}).then(async (token) => {
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    
+                    // Başarılı giriş günlüğü
+                    await logSecurityEvent(userCredential.user.uid, "Successful Login");
+                    
+                    loginAttempts = 0; 
+                    window.location.href = "dashboard.html";
+                } catch (error) {
+                    loginAttempts++; 
+                    await logSecurityEvent("UNKNOWN", `Failed Login: ${error.code}`);
+                    
+                    errorMessageEl.innerText = "Invalid email or password.";
+                    errorMessageEl.classList.remove('hidden');
+                }
+            });
         });
     });
-});
 
-// 4. Add this helper function at the very bottom of your script
-async function logSecurityEvent(uid, action) {
-    await addDoc(collection(db, "security_logs"), {
-        userId: uid,
-        action: action,
-        timestamp: new Date().toISOString(),
-        device: navigator.platform,
-        browser: navigator.userAgent
-    }); [cite: 2026-02-21]
-}
+    // --- ŞİFRE SIFIRLAMA ---
+    const forgotPasswordLink = document.getElementById('forgot-password');
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('email').value.trim();
 
-        // --- FORGOT PASSWORD LOGIC ---
-        const forgotPasswordLink = document.getElementById('forgot-password');
-        
-        forgotPasswordLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const emailInput = document.getElementById('email').value.trim();
+        if (!emailInput) {
+            errorMessageEl.innerText = "Please type your email address first.";
+            errorMessageEl.classList.remove('hidden', 'text-turkuaz');
+            errorMessageEl.classList.add('text-red-600');
+            return;
+        }
 
-            if (!emailInput) {
-                errorMessageEl.classList.remove('text-turkuaz');
-                errorMessageEl.classList.add('text-red-600');
-                errorMessageEl.innerText = "Please type your email address into the box first, then click 'Forgot your password?'.";
+        sendPasswordResetEmail(auth, emailInput)
+            .then(() => {
+                errorMessageEl.innerText = "Password reset link sent to your email!";
+                errorMessageEl.classList.remove('hidden', 'text-red-600');
+                errorMessageEl.classList.add('text-turkuaz');
+            })
+            .catch((error) => {
+                errorMessageEl.innerText = "Error: " + error.message;
                 errorMessageEl.classList.remove('hidden');
-                return;
-            }
-
-            sendPasswordResetEmail(auth, emailInput)
-                .then(() => {
-                    errorMessageEl.classList.remove('text-red-600');
-                    errorMessageEl.classList.add('text-turkuaz'); 
-                    errorMessageEl.innerText = "A password reset link has been sent to your email!";
-                    errorMessageEl.classList.remove('hidden');
-                })
-                .catch((error) => {
-                    errorMessageEl.classList.remove('text-turkuaz');
-                    errorMessageEl.classList.add('text-red-600');
-                    errorMessageEl.innerText = "Error sending reset email: " + error.message;
-                    errorMessageEl.classList.remove('hidden');
-                });
-        });
-    </script>
+            });
+    });
+</script>
 </body>
 </html>
