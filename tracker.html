@@ -442,25 +442,27 @@
         }
 
         // --- CHART DATA ---
-        function initChart() {
-            const ctx = document.getElementById('roiChart').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: { labels: [], datasets: [] }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { position: 'top' } },
-                    scales: { x: { display: false } } 
-                }
-            });
-            
-            fetchChartData("SPY");
-            
-            document.getElementById('benchmarkSelect').addEventListener('change', (e) => {
-                fetchChartData(e.target.value);
-            });
+// Replace your current initChart() function with this:
+function initChart() {
+    const ctx = document.getElementById('roiChart').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets: [] }, 
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { position: 'top' } },
+            scales: { x: { display: false } } 
         }
+    });
+    
+    // FETCH AAPL INSTEAD OF SPY TO AVOID 403 ERROR
+    fetchChartData("AAPL");
+    
+    document.getElementById('benchmarkSelect').addEventListener('change', (e) => {
+        fetchChartData(e.target.value);
+    });
+}}
 
         async function fetchChartData(symbol) {
             const toDate = Math.floor(Date.now() / 1000);
