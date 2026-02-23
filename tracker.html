@@ -329,7 +329,6 @@
             }
         });
 
-        // --- CORE LOGIC: CALCULATE HOLDINGS ---
         function loadAndCalculateHoldings(uid) {
             const q = query(collection(db, "trades"), where("userId", "==", uid), orderBy("date", "asc"));
 
@@ -338,23 +337,32 @@
 
                 snapshot.forEach((doc) => {
                     const trade = doc.data();
-                    const ticker = trade.ticker;
+                    
+                    // HATA DÜZELTME: Eski verilerde "asset" yazıyorsa onu da "ticker" olarak kabul et
+                    const ticker = trade.ticker || trade.asset;
+                    
+                    if (!ticker) return; // İsimsiz bozuk bir veri varsa sistemi çökertmemesi için atla
+
                     if (!holdingsMap[ticker]) holdingsMap[ticker] = { qty: 0, totalCost: 0 };
 
+                    // Sayıları güvenlik çemberine al (Eski veriler metin olarak kalmış olabilir)
+                    const qty = Number(trade.qty) || 1;
+                    const price = Number(trade.price) || 0;
+
                     if (trade.type === "Buy") {
-                        holdingsMap[ticker].qty += trade.qty;
-                        holdingsMap[ticker].totalCost += (trade.qty * trade.price);
+                        holdingsMap[ticker].qty += qty;
+                        holdingsMap[ticker].totalCost += (qty * price);
                     } else if (trade.type === "Sell" && holdingsMap[ticker].qty > 0) {
                         const currentAvgCost = holdingsMap[ticker].totalCost / holdingsMap[ticker].qty;
-                        holdingsMap[ticker].qty -= trade.qty;
-                        holdingsMap[ticker].totalCost -= (trade.qty * currentAvgCost);
+                        holdingsMap[ticker].qty -= qty;
+                        holdingsMap[ticker].totalCost -= (qty * currentAvgCost);
                     }
                 });
 
                 const activeTickers = Object.keys(holdingsMap).filter(t => holdingsMap[t].qty > 0.0001);
                 
                 if (activeTickers.length === 0) {
-                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">No active holdings found. Log a trade above.</td></tr>';
+                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">Aktif hisse bulunamadı. Lütfen yukarıdan "Buy" işlemi ile portföyünüze varlık ekleyin.</td></tr>';
                     return;
                 }
 
@@ -369,7 +377,6 @@
                     const livePrices = {};
                     for (const ticker of activeTickers) {
                         try {
-                            // DÜZELTİLDİ: FINNHUB_API_KEY kullanıldı
                             const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_API_KEY}`);
                             const data = await res.json();
                             livePrices[ticker] = data.c || data.pc || (holdingsMap[ticker].totalCost / holdingsMap[ticker].qty);
