@@ -214,7 +214,7 @@
 
                 searchTimeout = setTimeout(async () => {
                     try {
-                        const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${FINNHUB_API_KEY}`);
+                        const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${d6dnp11r01qm89pka0e0}`);
                         
                         // Handle Rate Limiting
                         if (res.status === 429) {
@@ -291,7 +291,7 @@
         async function checkMarketStatus() {
             const badge = document.getElementById('marketStatus');
             try {
-                const response = await fetch(`https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${FINNHUB_API_KEY}`);
+                const response = await fetch(`https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${d6dnp11r01qm89pka0e0}`);
                 const data = await response.json();
                 
                 if (data.isOpen) {
@@ -385,7 +385,7 @@
                     const livePrices = {};
                     for (const ticker of activeTickers) {
                         try {
-                            const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_API_KEY}`);
+                            const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${d6dnp11r01qm89pka0e0}`);
                             const data = await res.json();
                             livePrices[ticker] = data.c || data.pc || (holdingsMap[ticker].totalCost / holdingsMap[ticker].qty);
                         } catch (e) {
@@ -467,7 +467,7 @@
             const fromDate = toDate - (30 * 24 * 60 * 60); 
 
             try {
-                const res = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fromDate}&to=${toDate}&token=${FINNHUB_API_KEY}`);
+                const res = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fromDate}&to=${toDate}&token=${d6dnp11r01qm89pka0e0}`);
                 const data = await res.json();
 
                 if (data.s === "ok") {
