@@ -153,7 +153,7 @@
         import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ⚠️ API KEYS ⚠️
-        const FINNHUB_API_KEY = "d6dnp11r01qm89pka0dg";
+        const FINNHUB_API_KEY = "d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0";
         const firebaseConfig = {
             apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
             authDomain: "paydas-potrfolio.firebaseapp.com",
@@ -212,7 +212,7 @@
             // Wait 500ms after user stops typing to save API calls
             searchTimeout = setTimeout(async () => {
                 try {
-                    const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${d6dnp11r01qm89pka0dg}`);
+                    const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0}`);
                     const data = await res.json();
                     
                     tickerDropdown.innerHTML = '';
@@ -285,7 +285,7 @@
         async function checkMarketStatus() {
             const badge = document.getElementById('marketStatus');
             try {
-                const response = await fetch(`https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${d6dnp11r01qm89pka0dg}`);
+                const response = await fetch(`https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0}`);
                 const data = await response.json();
                 
                 if (data.isOpen) {
@@ -379,7 +379,7 @@ function loadAndCalculateHoldings(uid) {
             const livePrices = {};
             for (const ticker of activeTickers) {
                 try {
-                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${d6dnp11r01qm89pka0dg}`);
+                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0}`);
                     const data = await res.json();
                     livePrices[ticker] = data.c || data.pc || (holdingsMap[ticker].totalCost / holdingsMap[ticker].qty);
                 } catch (e) {
@@ -468,7 +468,7 @@ function loadAndCalculateHoldings(uid) {
 
             try {
                 // Resolution 'D' = Daily candles
-                const res = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fromDate}&to=${toDate}&token=${d6dnp11r01qm89pka0dg}`);
+                const res = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fromDate}&to=${toDate}&token=${d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0}`);
                 const data = await res.json();
 
                 if (data.s === "ok") {
