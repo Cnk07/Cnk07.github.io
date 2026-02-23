@@ -1,151 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Tracker - Paydas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .text-turkuaz { color: #0d9488; }
-        .bg-turkuaz { background-color: #0d9488; }
-        /* Custom scrollbar for the search dropdown */
-        #tickerDropdown::-webkit-scrollbar { width: 6px; }
-        #tickerDropdown::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    </style>
-</head>
-<body class="bg-slate-50 flex h-screen overflow-hidden hidden" id="secure-body">
-
-    <aside class="w-64 bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 shrink-0 hidden md:flex">
-        <div class="p-6 border-b border-slate-800">
-            <a href="dashboard.html" class="flex items-center space-x-3 hover:opacity-80 transition cursor-pointer group">
-                <svg class="h-8 w-8 text-turkuaz group-hover:text-teal-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-                <span class="text-xl font-bold tracking-tight text-white">PAYDAS</span>
-            </a>
-        </div>
-
-        <nav class="flex-grow p-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                <span>Portfolio Summary</span>
-            </a>
-            <a href="tracker.html" class="flex items-center space-x-3 bg-slate-800 text-turkuaz px-4 py-3 rounded-lg font-medium transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                <span>Portfolio Tracker</span>
-            </a>
-            <a href="reports.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                <span>Reports & Analytics</span>
-            </a>
-        </nav>
-
-        <div class="p-4 border-t border-slate-800">
-            <button id="logoutBtn" class="flex items-center space-x-2 w-full text-slate-400 hover:text-white px-4 py-3 rounded-lg transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span>Sign Out</span>
-            </button>
-            <button id="privacyToggle" class="p-2 text-slate-400 hover:text-turkuaz transition bg-slate-50 rounded-full mr-4" title="Toggle Privacy Mode">
-    <svg id="eyeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
-</button>
-        </div>
-    </aside>
-
-    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
-        
-        <header class="bg-white border-b border-slate-200 p-6 flex justify-between items-center z-10 shadow-sm shrink-0">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-900">Analytics & Tracking</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm font-medium text-slate-500">US Market:</span>
-                <span id="marketStatus" title="Fetching market times..." class="cursor-help px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200 border-dashed">Checking...</span>
-            </div>
-        </header>
-
-        <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 xl:col-span-1 h-fit">
-                    <h3 class="text-lg font-bold text-slate-900 mb-4">Log Transaction</h3>
-                    <form id="tradeForm" class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700">Type</label>
-                                <select id="tradeType" class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none">
-                                    <option value="Buy">Buy</option>
-                                    <option value="Sell">Sell</option>
-                                </select>
-                            </div>
-                            
-                            <div class="relative">
-                                <label class="block text-sm font-medium text-slate-700">Asset / Ticker</label>
-                                <input type="text" id="tradeTicker" autocomplete="off" required placeholder="e.g. AAPL" class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none uppercase transition">
-                                <ul id="tickerDropdown" class="absolute z-50 w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 hidden max-h-48 overflow-y-auto"></ul>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700">Quantity</label>
-                                <input type="number" id="tradeQty" step="0.0001" min="0.0001" required class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700">Execution Price ($)</label>
-                                <input type="number" id="tradePrice" step="0.01" min="0.01" required class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Date</label>
-                            <input type="date" id="tradeDate" required class="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-turkuaz outline-none">
-                        </div>
-                        <button type="submit" id="submitTradeBtn" class="w-full bg-turkuaz text-white font-bold py-2.5 rounded-lg hover:bg-teal-700 transition">Log Trade</button>
-                    </form>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 xl:col-span-2 flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-slate-900">Historical Trend (30 Days)</h3>
-                        <div class="flex space-x-2">
-                            <select id="benchmarkSelect" class="text-sm border border-slate-300 rounded-lg px-2 py-1 outline-none font-medium">
-                                <option value="SPY">S&P 500 (SPY)</option>
-                                <option value="QQQ">Nasdaq 100 (QQQ)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="flex-1 relative w-full min-h-[250px]">
-                        <canvas id="roiChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-                <div class="px-6 py-5 border-b border-slate-200">
-                    <h3 class="text-lg font-bold text-slate-900">Current Holdings & Live Performance</h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[800px]">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                                <th class="px-6 py-3 font-medium">Ticker</th>
-                                <th class="px-6 py-3 font-medium text-right">Total Qty</th>
-                                <th class="px-6 py-3 font-medium text-right">Avg Cost</th>
-                                <th class="px-6 py-3 font-medium text-right">Live Price</th>
-                                <th class="px-6 py-3 font-medium text-right">Total Value</th>
-                                <th class="px-6 py-3 font-medium text-right">Unrealized P/L</th>
-                            </tr>
-                        </thead>
-                        <tbody id="holdingsTableBody" class="divide-y divide-slate-100 text-sm">
-                            <tr><td colspan="6" class="text-center py-8 text-slate-500">Loading portfolio data...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </main>
 <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -194,7 +46,7 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "login.html"); });
 
-        // --- 1: DYNAMIC TICKER SEARCH (Burası arama kutusunu çalıştırır) ---
+        // --- 1: DYNAMIC TICKER SEARCH ---
         const tickerInput = document.getElementById('tradeTicker');
         const tickerDropdown = document.getElementById('tickerDropdown');
         let searchTimeout;
@@ -215,12 +67,19 @@
                 searchTimeout = setTimeout(async () => {
                     try {
                         const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${FINNHUB_API_KEY}`);
-                        const data = await res.json();
                         
+                        // Handle Rate Limiting gracefully
+                        if (res.status === 429) {
+                            tickerDropdown.innerHTML = '<li class="px-4 py-2 text-orange-500 text-sm">API Limit reached. Please wait a moment or type the exact ticker.</li>';
+                            return;
+                        }
+
+                        const data = await res.json();
                         tickerDropdown.innerHTML = '';
                         
-                        if (data.count > 0) {
-                            const cleanResults = data.result.filter(r => !r.displaySymbol.includes('.')).slice(0, 8);
+                        // FIX: Check data.result directly instead of data.count
+                        if (data.result && data.result.length > 0) {
+                            const cleanResults = data.result.filter(r => r.displaySymbol && !r.displaySymbol.includes('.')).slice(0, 8);
                             
                             if(cleanResults.length === 0) {
                                  tickerDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-sm">No standard stocks found.</li>';
@@ -241,9 +100,10 @@
                              tickerDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-sm text-center">No results found</li>';
                         }
                     } catch(e) { 
+                        console.error("Search Error:", e);
                         tickerDropdown.innerHTML = '<li class="px-4 py-2 text-red-500 text-sm">Search error. Type manually.</li>';
                     }
-                }, 500);
+                }, 500); // 500ms delay prevents spamming the API
             });
 
             document.addEventListener('click', (e) => {
@@ -331,7 +191,7 @@
             }
         });
 
-        // --- 4: CALCULATE HOLDINGS (Geriye dönük uyumluluk eklendi) ---
+        // --- 4: CALCULATE HOLDINGS ---
         function loadAndCalculateHoldings(uid) {
             const q = query(collection(db, "trades"), where("userId", "==", uid), orderBy("date", "asc"));
 
@@ -340,7 +200,7 @@
 
                 snapshot.forEach((doc) => {
                     const trade = doc.data();
-                    const ticker = trade.ticker || trade.asset; // Eski verileri kurtarır
+                    const ticker = trade.ticker || trade.asset; 
                     
                     if (!ticker) return;
 
@@ -362,7 +222,8 @@
                 const activeTickers = Object.keys(holdingsMap).filter(t => holdingsMap[t].qty > 0.0001);
                 
                 if (activeTickers.length === 0) {
-                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">Aktif hisse bulunamadı. Lütfen yukarıdan "Buy" işlemi ile varlık ekleyin.</td></tr>';
+                    // FIX: Translated back to English
+                    document.getElementById('holdingsTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">No active holdings found. Please add an asset using the "Buy" form above.</td></tr>';
                     return;
                 }
 
@@ -484,5 +345,3 @@
             }
         }
     </script>
-</body>
-</html>
