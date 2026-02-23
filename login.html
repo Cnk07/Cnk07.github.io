@@ -87,9 +87,9 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    // EKSİK OLANLAR EKLENDİ: getFirestore, collection, addDoc
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // FIREBASE AYARLARIN
     const firebaseConfig = {
         apiKey: "AIzaSyBAbp5Kqv7PqyA7rFJAxvIqnzBRglSXJ5Q",
         authDomain: "paydas-potrfolio.firebaseapp.com",
@@ -102,16 +102,15 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app); // Firestore başlatıldı
+    const db = getFirestore(app);
 
     const loginForm = document.getElementById('loginForm');
     const errorMessageEl = document.getElementById('error-message');
 
-    // Güvenlik Ayarları
     let loginAttempts = 0;
     const MAX_ATTEMPTS = 5;
 
-    // --- LOG SECURITY EVENT FONKSİYONU ---
+    // GÜVENLİK LOG FONKSİYONU
     async function logSecurityEvent(uid, action) {
         try {
             await addDoc(collection(db, "security_logs"), {
@@ -122,32 +121,29 @@
                 browser: navigator.userAgent
             });
         } catch (err) {
-            console.error("Güvenlik kaydı hatası:", err);
+            console.error("Log error:", err);
         }
     }
 
-    // --- LOGIN LOGIC ---
+    // GİRİŞ İŞLEMİ
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         errorMessageEl.classList.add('hidden');
 
-        // 1. Brute Force Koruması
         if (loginAttempts >= MAX_ATTEMPTS) {
-            alert("Security Lock: Too many failed attempts. Please try again later.");
+            errorMessageEl.innerText = "Security Lock: Too many failed attempts.";
+            errorMessageEl.classList.remove('hidden');
             return;
         }
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        // 2. reCAPTCHA v3 Tetikleme
+        // reCAPTCHA Tetikleme
         grecaptcha.ready(function() {
-            // Senin verdiğin key kullanıldı
             grecaptcha.execute('6Le1lXQsAAAAAO4RlY8-q-NRb3xpIEMo5VpjBB-e', {action: 'login'}).then(async (token) => {
                 try {
                     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    
-                    // Başarılı giriş günlüğü
                     await logSecurityEvent(userCredential.user.uid, "Successful Login");
                     
                     loginAttempts = 0; 
@@ -163,7 +159,7 @@
         });
     });
 
-    // --- ŞİFRE SIFIRLAMA ---
+    // ŞİFRE SIFIRLAMA İŞLEMİ
     const forgotPasswordLink = document.getElementById('forgot-password');
     forgotPasswordLink.addEventListener('click', (e) => {
         e.preventDefault();
