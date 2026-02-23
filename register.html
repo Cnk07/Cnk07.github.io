@@ -141,7 +141,12 @@
                         updateProfile(user, { displayName: username }),
                         sendEmailVerification(user)
                     ]).then(() => {
-                        window.location.href = "success.html"; 
+                        // Change this logic in login.html and register.html
+if (userCredential.user.emailVerified) {
+    window.location.href = "dashboard.html";
+} else {
+    window.location.href = "verify.html";
+}
                     });
                 })
                 .catch((error) => {
