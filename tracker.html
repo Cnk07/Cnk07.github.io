@@ -181,6 +181,9 @@
 
         // --- AUTH GUARD ---
         onAuthStateChanged(auth, (user) => {
+            if (!user.emailVerified) {
+    window.location.replace("verify.html");
+}
             if (user) {
                 document.getElementById('secure-body').classList.remove('hidden');
                 currentUserUID = user.uid;
