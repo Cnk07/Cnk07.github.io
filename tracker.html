@@ -316,6 +316,34 @@
             let diffMins = Math.floor((diffMs % 3600000) / 60000);
             return `Opens in ${diffHrs} hours and ${diffMins} minutes.`;
         }
+        // --- 2: MARKET STATUS & MOBILE POPUP ---
+        const badgeContainer = document.getElementById('marketBadgeContainer');
+        const marketTooltip = document.getElementById('marketTooltip');
+        const tooltipTitle = document.getElementById('tooltipTitle');
+        const tooltipText = document.getElementById('tooltipText');
+
+        // Toggle popup on click/tap
+        if (badgeContainer && marketTooltip) {
+            badgeContainer.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevents the document click listener from firing immediately
+                const isHidden = marketTooltip.classList.contains('opacity-0');
+                if (isHidden) {
+                    marketTooltip.classList.remove('opacity-0');
+                    marketTooltip.classList.add('opacity-100');
+                } else {
+                    marketTooltip.classList.add('opacity-0');
+                    marketTooltip.classList.remove('opacity-100');
+                }
+            });
+
+            // Hide popup if user taps anywhere else on the screen
+            document.addEventListener('click', (e) => {
+                if (!badgeContainer.contains(e.target)) {
+                    marketTooltip.classList.add('opacity-0');
+                    marketTooltip.classList.remove('opacity-100');
+                }
+            });
+        }
 
         async function checkMarketStatus() {
             const badge = document.getElementById('marketStatus');
@@ -325,21 +353,27 @@
                 
                 if (data.isOpen) {
                     badge.innerText = "OPEN";
-                    badge.className = "cursor-help px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200 border-dashed";
-                    badge.title = "Market is currently trading.";
+                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200 border-dashed";
+                    if(tooltipTitle) tooltipTitle.innerText = "Market is OPEN";
+                    if(tooltipText) tooltipText.innerText = "Currently trading live.";
                 } else {
                     badge.innerText = "CLOSED";
-                    badge.className = "cursor-help px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 border-dashed";
-                    badge.title = getNextMarketOpenString(); 
+                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 border-dashed";
+                    if(tooltipTitle) tooltipTitle.innerText = "Market is CLOSED";
+                    if(tooltipText) tooltipText.innerText = getNextMarketOpenString(); 
                 }
             } catch (e) {
                 badge.innerText = "API ERROR";
             }
             
+            // Re-calculate the countdown every 60 seconds
             setInterval(() => {
-                if(badge.innerText === "CLOSED") badge.title = getNextMarketOpenString();
+                if(badge.innerText === "CLOSED" && tooltipText) {
+                    tooltipText.innerText = getNextMarketOpenString();
+                }
             }, 60000);
         }
+
 
         // --- FIREBASE LOG TRADE ---
         document.getElementById('tradeForm').addEventListener('submit', async (e) => {
