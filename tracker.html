@@ -177,8 +177,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         // EXACT 40-CHARACTER KEY AS REQUESTED
         const FINNHUB_API_KEY = "d6dnp11r01qm89pka0dgd6dnp11r01qm89pka0e0";
         
@@ -219,6 +218,7 @@
                 initChart();
                 loadAndCalculateHoldings(currentUserUID);
             } else {
+                loadwatchlisr();
                 window.location.replace("login.html");
             }
         });
@@ -554,6 +554,157 @@
                 updatePrivacyUI();
             });
         }
+        const wlSearch = document.getElementById('wlSearch');
+        const wlDropdown = document.getElementById('wlDropdown');
+        const wlTableBody = document.getElementById('wlTableBody');
+        let wlSearchTimeout;
+        let currentWatchlist = [];
+        let livePricesInterval;
+
+        if (wlSearch && wlDropdown) {
+            wlSearch.addEventListener('input', (e) => {
+                clearTimeout(wlSearchTimeout);
+                const queryVal = e.target.value.trim().toUpperCase();
+                
+                if (queryVal.length < 1) {
+                    wlDropdown.classList.add('hidden');
+                    return;
+                }
+
+                wlDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-xs text-center animate-pulse">Searching market...</li>';
+                wlDropdown.classList.remove('hidden');
+
+                wlSearchTimeout = setTimeout(async () => {
+                    try {
+                        const res = await fetch(`https://finnhub.io/api/v1/search?q=${queryVal}&token=${FINNHUB_API_KEY}`);
+                        if (res.status === 429) {
+                            wlDropdown.innerHTML = '<li class="px-4 py-2 text-orange-500 text-sm">API Limit reached. Wait a moment.</li>';
+                            return;
+                        }
+                        const data = await res.json();
+                        wlDropdown.innerHTML = '';
+                        
+                        if (data.result && data.result.length > 0) {
+                            const cleanResults = data.result.filter(r => r.displaySymbol && !r.displaySymbol.includes('.')).slice(0, 5);
+                            if(cleanResults.length === 0) {
+                                 wlDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-sm">No stocks found.</li>';
+                                 return;
+                            }
+                            cleanResults.forEach(item => {
+                                const li = document.createElement('li');
+                                li.className = "px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-0 transition";
+                                li.innerHTML = `<span class="font-bold text-slate-900">${item.displaySymbol}</span> <span class="text-slate-500 text-xs ml-2 truncate">${item.description}</span>`;
+                                li.onclick = () => window.addToWatchlist(item.displaySymbol, item.description);
+                                wlDropdown.appendChild(li);
+                            });
+                        } else {
+                             wlDropdown.innerHTML = '<li class="px-4 py-2 text-slate-500 text-sm text-center">No results found</li>';
+                        }
+                    } catch(e) { 
+                        wlDropdown.innerHTML = '<li class="px-4 py-2 text-red-500 text-sm">Search error.</li>';
+                    }
+                }, 500);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!wlSearch.contains(e.target) && !wlDropdown.contains(e.target)) wlDropdown.classList.add('hidden');
+            });
+        }
+
+        window.addToWatchlist = async function(ticker, name) {
+            wlSearch.value = '';
+            wlDropdown.classList.add('hidden');
+            
+            if (currentWatchlist.some(w => w.ticker === ticker)) {
+                alert(`${ticker} is already in your watchlist!`);
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "watchlist"), {
+                    userId: currentUserUID,
+                    ticker: ticker,
+                    companyName: name,
+                    addedAt: new Date().toISOString()
+                });
+            } catch (err) {
+                alert("Error adding to watchlist: " + err.message);
+            }
+        };
+
+        window.removeWatchlistItem = async function(docId) {
+            try {
+                await deleteDoc(doc(db, "watchlist", docId));
+            } catch (e) {
+                console.error("Remove failed", e);
+            }
+        };
+
+        function loadWatchlist() {
+            if (!currentUserUID || !wlTableBody) return;
+            const q = query(collection(db, "watchlist"), where("userId", "==", currentUserUID), orderBy("addedAt", "asc"));
+            onSnapshot(q, async (snapshot) => {
+                currentWatchlist = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                fetchWatchlistPricesAndRender();
+            });
+        }
+
+        async function fetchWatchlistPricesAndRender() {
+            if (currentWatchlist.length === 0) {
+                wlTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-10 text-slate-500">
+                    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    Your Watchlist is empty. Search above to add assets.
+                </td></tr>`;
+                return;
+            }
+
+            const liveData = {};
+            for (const item of currentWatchlist) {
+                try {
+                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${item.ticker}&token=${FINNHUB_API_KEY}`);
+                    const data = await res.json();
+                    liveData[item.ticker] = { price: data.c, change: data.d, percent: data.dp };
+                } catch (e) {
+                    console.error("Failed to fetch WL price for", item.ticker);
+                }
+            }
+
+            wlTableBody.innerHTML = '';
+            currentWatchlist.forEach(item => {
+                const data = liveData[item.ticker];
+                const isUp = data && data.change >= 0;
+                const changeColor = isUp ? "text-green-600" : "text-red-500";
+                const sign = isUp ? "+" : "";
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100 group";
+                tr.innerHTML = `
+                    <td class="px-4 py-4">
+                        <div class="font-bold text-slate-900">${item.ticker}</div>
+                        <div class="text-xs text-slate-500 truncate max-w-[150px]">${item.companyName}</div>
+                    </td>
+                    <td class="px-4 py-4 text-right font-medium text-slate-900" data-mask="true">
+                        ${data && data.price ? '$' + data.price.toFixed(2) : '<span class="animate-pulse">...</span>'}
+                    </td>
+                    <td class="px-4 py-4 text-right font-medium ${changeColor}" data-mask="true">
+                        ${data && data.change !== undefined ? `<div>${sign}${data.change.toFixed(2)}</div><div class="text-xs opacity-80">${sign}${data.percent.toFixed(2)}%</div>` : '-'}
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                        <button onclick="removeWatchlistItem('${item.id}')" class="text-slate-400 hover:text-red-500 opacity-0 md:group-hover:opacity-100 transition p-2" title="Remove">
+                            <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                    </td>
+                `;
+                wlTableBody.appendChild(tr);
+            });
+            
+            if (typeof updatePrivacyUI === 'function') updatePrivacyUI();
+        }
+
+        clearInterval(livePricesInterval);
+        livePricesInterval = setInterval(() => {
+            if (currentWatchlist.length > 0) fetchWatchlistPricesAndRender();
+        }, 30000);
         
         updatePrivacyUI();
     </script>
